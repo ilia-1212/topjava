@@ -30,11 +30,11 @@
         </c:choose>
 
         <tr>
-            <td bgcolor=${bgcolor}>${TimeUtil.toHtml(meal.dateTime)}</td>
-            <td bgcolor=${bgcolor}><a href="meals?action=view&uuid=${meal.uuid}">${meal.description}</a></td>
-            <td bgcolor=${bgcolor}>${meal.calories}</td>
-            <td bgcolor=${bgcolor}><a href="meals?action=edit&uuid=${meal.uuid}">Edit</a></td>
-            <td bgcolor=${bgcolor}><a href="meals?action=delete&uuid=${meal.uuid}">Delete</a></td>
+            <td><font color=${bgcolor}>${TimeUtil.toHtml(meal.dateTime)}</font></td>
+            <td><font color=${bgcolor}><a href="meals?action=view&uuid=${meal.uuid}">${meal.description}</a></font></td>
+            <td><font color=${bgcolor}>${meal.calories}</font></td>
+            <td><font color=${bgcolor}><a href="meals?action=edit&uuid=${meal.uuid}">Edit</a></font></td>
+            <td><font color=${bgcolor}><a href="meals?action=delete&uuid=${meal.uuid}">Delete</a></font></td>
        </tr>
     </c:forEach>
 </table>
