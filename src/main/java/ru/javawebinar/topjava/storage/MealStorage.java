@@ -21,7 +21,8 @@ public class MealStorage implements Storage<Meal> {
 
     @Override
     public Meal add(Meal t) {
-        int key = MealsUtil.next_seq();
+        int key = (t.getId() == 0) ? MealsUtil.next_seq() : t.getId();
+        t.setId(key);
         mealStorage.put(key, t);
         return getById(key);
     }

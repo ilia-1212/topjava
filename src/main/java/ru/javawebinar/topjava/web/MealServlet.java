@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.storage.MealStorage;
 import ru.javawebinar.topjava.storage.Storage;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -46,7 +45,6 @@ public class MealServlet extends HttpServlet {
         Meal temp;
         int mealId = Integer.parseInt(id);
         temp = new Meal();
-        temp.setId(mealId);
         temp.setDateTime(TimeUtil.fromHtml(dateTime));
         temp.setDescription(description);
         temp.setCalories(Integer.parseInt(calories));
@@ -55,6 +53,7 @@ public class MealServlet extends HttpServlet {
             storage.add(temp);
             log.info("MealServlet storage.add");
         } else {
+            temp.setId(mealId);
             storage.update(temp);
             log.info("MealServlet storage.update");
         }
@@ -92,7 +91,9 @@ public class MealServlet extends HttpServlet {
                 break;
             }
             default:
-                request.setAttribute("meals", filteredByStreams(storage.getAll()));
+                List<Meal> meals = storage.getAll();
+                request.setAttribute("meals", MealsUtil.filteredByStreams(meals,
+                        LocalTime.MIN, LocalTime.MAX, MealsUtil.MAX_CALORIES));
                 request.getRequestDispatcher(LIST).forward(request, response);
                 return;
         }
@@ -100,8 +101,4 @@ public class MealServlet extends HttpServlet {
         request.getRequestDispatcher(forward).forward(request, response);
     }
 
-    private List<MealTo> filteredByStreams(List<Meal> meals) {
-        return MealsUtil.filteredByStreams(meals,
-                LocalTime.MIN, LocalTime.MAX, MealsUtil.MAX_CALORIES);
-    }
 }
