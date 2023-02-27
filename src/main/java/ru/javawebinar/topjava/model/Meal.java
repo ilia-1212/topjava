@@ -3,10 +3,9 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Objects;
 
 public class Meal {
-    private Integer uuid;
+    private int id;
 
     private LocalDateTime dateTime;
 
@@ -17,30 +16,23 @@ public class Meal {
     public Meal() {
     }
 
-    public Meal(Integer uuid, String description) {
-        Objects.requireNonNull(uuid, "uuid must not be null");
-        Objects.requireNonNull(description, "fullName must not be null");
-        this.uuid = uuid;
-        this.description = description;
+    public Meal(int id, String description) {
+        this(id, null, description, 0);
     }
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.dateTime = dateTime;
-        this.description = description;
-    }
-
-    public Meal(Integer uuid, LocalDateTime ldt, String description, Integer calories) {
-        this(uuid, description);
+    public Meal(int id, LocalDateTime ldt, String description, int calories) {
+        this.id = id;
         this.dateTime = ldt;
+        this.description = description;
         this.calories = calories;
     }
 
-    public void setUuid(Integer uuid) {
-        this.uuid = uuid;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Integer getUuid() {
-        return uuid;
+    public int getId() {
+        return id;
     }
 
     public LocalDateTime getDateTime() {

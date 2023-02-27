@@ -12,7 +12,7 @@
     <div class="form-wrapper">
         <h2>${meal.description}</h2>
         <div>dateTime:
-            <%= TimeUtil.toHtml(meal.getDateTime())%>
+            ${TimeUtil.toHtml(meal.dateTime)}
         </div>
 
         <div>Calories:

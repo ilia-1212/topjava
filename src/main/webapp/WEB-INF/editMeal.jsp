@@ -1,4 +1,5 @@
 <%@ page import="ru.javawebinar.topjava.util.TimeUtil" %>
+<%@ page import="ru.javawebinar.topjava.util.MealsUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ru">
@@ -11,17 +12,21 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
     <form name="formMeal" method="post" action="meals" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" name="uuid" value="${meal.uuid}">
+        <input type="hidden" name="id" value="${meal.id}">
         <div class="form-wrapper">
-            <h2>Edit Meal</h2>
+            <c:choose>
+                <c:when test="${meal.id == 0}"><h4>Add Meal</h4></c:when>
+                <c:otherwise><h4>Edit Meal</h4></c:otherwise>
+            </c:choose>
+
             <div>dateTime:
-                <input type="text" placeholder="dd/MM/yyyy HH:mm" name="dateTime" value="<%= TimeUtil.toHtml(meal.getDateTime())%>">
+                <input type="datetime-local" name="dateTime" value="${meal.dateTime}">
             </div>
             <div>description:
             <input type="text" name="description" value="${meal.description}" placeholder="Завтрак/Обед/Ужин" required>
             </div>
             <div>Calories:
-                <input type="text" name="calories" value="${meal.calories}" placeholder="100" required>
+                <input type="number" name="calories" value="${meal.calories}" required>
             </div>
         </div>
         <div class="button-section">
