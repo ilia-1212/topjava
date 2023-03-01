@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -32,22 +33,17 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        log.info("MealServlet doPost");
         req.setCharacterEncoding("UTF-8");
         String id = req.getParameter("id");
         String dateTime = req.getParameter("dateTime");
         String description = req.getParameter("description");
         String calories = req.getParameter("calories");
-        log.info("MealServlet parameters: id=" + id +
-                "; dateTime=" + dateTime +
-                "; description=" + description +
-                ";calories=" + calories);
+
+        log.info("MealServlet doPost parameters: id = {}, dateTime = {}, description = {}, calories = {}", id, dateTime, description, calories);
+
         Meal temp;
         int mealId = Integer.parseInt(id);
-        temp = new Meal();
-        temp.setDateTime(TimeUtil.fromHtml(dateTime));
-        temp.setDescription(description);
-        temp.setCalories(Integer.parseInt(calories));
+        temp = new Meal(TimeUtil.fromHtml(dateTime), description, Integer.parseInt(calories));
 
         if (mealId == 0) {
             storage.add(temp);
@@ -62,11 +58,10 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.info("MealServlet doGet");
         String forward = "";
         String action = (request.getParameter("action") == null ? "" : request.getParameter("action"));
         String id = request.getParameter("id");
-        log.info("MealServlet action=" + action + ";id=" + id);
+        log.info("MealServlet doGet action = {}, id = {}", action, id);
 
         Meal meal;
         switch (action) {
@@ -77,7 +72,7 @@ public class MealServlet extends HttpServlet {
             }
             case "add": {
                 forward = INSERT_OR_EDIT;
-                meal = new Meal(0, LocalDateTime.now(), "", 0);
+                meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0);
                 break;
             }
             case "view": {
@@ -100,5 +95,4 @@ public class MealServlet extends HttpServlet {
         request.setAttribute("meal", meal);
         request.getRequestDispatcher(forward).forward(request, response);
     }
-
 }
