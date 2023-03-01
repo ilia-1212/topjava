@@ -39,8 +39,8 @@ public class MealServlet extends HttpServlet {
         String description = req.getParameter("description");
         String calories = req.getParameter("calories");
 
-        log.info("MealServlet doPost parameters: id = {}, dateTime = {}, description = {}, calories = {}"
-                , id, dateTime, description, calories);
+        log.info("MealServlet doPost parameters: id = {}, dateTime = {}, description = {}, calories = {}",
+                id, dateTime, description, calories);
 
         Meal meal = new Meal(TimeUtil.fromHtml(dateTime), description, Integer.parseInt(calories));
 
