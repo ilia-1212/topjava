@@ -24,12 +24,7 @@ public class MealServlet extends HttpServlet {
     private static final String INSERT_OR_EDIT = "WEB-INF/editMeal.jsp";
     private static final String VIEW = "WEB-INF/viewMeal.jsp";
     private static final String LIST = "WEB-INF/listMeal.jsp";
-    private Storage<Meal> storage;
-
-    @Override
-    public void init() {
-        storage = MealStorage.getStorage();
-    }
+    private final Storage<Meal> storage = new MealStorage();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -41,16 +36,15 @@ public class MealServlet extends HttpServlet {
 
         log.info("MealServlet doPost parameters: id = {}, dateTime = {}, description = {}, calories = {}", id, dateTime, description, calories);
 
-        Meal temp;
-        int mealId = Integer.parseInt(id);
-        temp = new Meal(TimeUtil.fromHtml(dateTime), description, Integer.parseInt(calories));
+        Meal meal;
+        meal = new Meal(TimeUtil.fromHtml(dateTime), description, Integer.parseInt(calories));
 
-        if (mealId == 0) {
-            storage.add(temp);
+        if (id.equals("")) {
+            storage.add(meal);
             log.info("MealServlet storage.add");
         } else {
-            temp.setId(mealId);
-            storage.update(temp);
+            meal.setId(Integer.valueOf(id));
+            storage.update(meal);
             log.info("MealServlet storage.update");
         }
         resp.sendRedirect("meals");

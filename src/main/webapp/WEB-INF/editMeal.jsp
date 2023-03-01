@@ -12,7 +12,7 @@
 <form name="formMeal" method="post" action="meals" enctype="application/x-www-form-urlencoded">
     <input type="hidden" name="id" value="${meal.id}">
     <div class="form-wrapper">
-        ${meal.id == 0 ? '<h4>Add Meal</h4>' : '<h4>Edit Meal</h4>'}
+        <h4>${meal.id == null ? 'Add Meal' : 'Edit Meal'}</h4>
         <div>dateTime:
             <input type="datetime-local" name="dateTime" value="${meal.dateTime}">
         </div>

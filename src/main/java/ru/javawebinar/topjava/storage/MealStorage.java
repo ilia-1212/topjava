@@ -13,33 +13,32 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealStorage implements Storage<Meal> {
     private final Map<Integer, Meal> mealStorage = new ConcurrentHashMap<>();
-    private static Storage<Meal> storage;
-    private static final AtomicInteger mealId = new AtomicInteger(0);
+    private final AtomicInteger mealId = new AtomicInteger(0);
 
-    public static int nextId() {
-        return mealId.incrementAndGet();
-    }
-
-    static {
+    {
         fillStorage();
     }
 
-    @Override
-    public Meal add(Meal t) {
-        int key = nextId();
-        t.setId(key);
-        return mealStorage.putIfAbsent(key, t);
+    private Integer nextId() {
+        return mealId.incrementAndGet();
     }
 
     @Override
-    public void delete(int id) {
+    public Meal add(Meal meal) {
+        Integer key = nextId();
+        meal.setId(key);
+        mealStorage.put(key, meal);
+        return meal;
+    }
+
+    @Override
+    public void delete(Integer id) {
         mealStorage.remove(id);
     }
 
     @Override
-    public Meal update(Meal t) {
-        mealStorage.replace(t.getId(), t);
-        return t;
+    public Meal update(Meal meal) {
+        return (mealStorage.replace(meal.getId(), meal) != null ? meal : null);
     }
 
     @Override
@@ -48,23 +47,18 @@ public class MealStorage implements Storage<Meal> {
     }
 
     @Override
-    public Meal getById(int id) {
+    public Meal getById(Integer id) {
         return mealStorage.get(id);
     }
 
-    public static Storage<Meal> getStorage() {
-        return storage;
-    }
-
-    private static void fillStorage() {
-        storage = new MealStorage();
+    private void fillStorage() {
         List<Meal> meals = defaultMealList();
         for (Meal meal : meals) {
-            storage.add(meal);
+            mealStorage.putIfAbsent(meal.getId(), meal);
         }
     }
 
-    private static List<Meal> defaultMealList() {
+    private List<Meal> defaultMealList() {
         return Arrays.asList(
                 new Meal(nextId(),
                         LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0),
