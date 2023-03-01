@@ -19,38 +19,6 @@ public class MealStorage implements Storage<Meal> {
         fillStorage();
     }
 
-    private Integer nextId() {
-        return mealId.incrementAndGet();
-    }
-
-    @Override
-    public Meal add(Meal meal) {
-        Integer key = nextId();
-        meal.setId(key);
-        mealStorage.put(key, meal);
-        return meal;
-    }
-
-    @Override
-    public void delete(Integer id) {
-        mealStorage.remove(id);
-    }
-
-    @Override
-    public Meal update(Meal meal) {
-        return (mealStorage.replace(meal.getId(), meal) != null ? meal : null);
-    }
-
-    @Override
-    public List<Meal> getAll() {
-        return (new ArrayList<>(mealStorage.values()));
-    }
-
-    @Override
-    public Meal getById(Integer id) {
-        return mealStorage.get(id);
-    }
-
     private void fillStorage() {
         List<Meal> meals = defaultMealList();
         for (Meal meal : meals) {
@@ -83,4 +51,37 @@ public class MealStorage implements Storage<Meal> {
                         "Ужин", 410)
         );
     }
+
+    @Override
+    public Meal add(Meal meal) {
+        int key = nextId();
+        meal.setId(key);
+        mealStorage.put(key, meal);
+        return meal;
+    }
+
+    private int nextId() {
+        return mealId.incrementAndGet();
+    }
+
+    @Override
+    public void delete(int id) {
+        mealStorage.remove(id);
+    }
+
+    @Override
+    public Meal update(Meal meal) {
+        return mealStorage.replace(meal.getId(), meal) != null ? meal : null;
+    }
+
+    @Override
+    public List<Meal> getAll() {
+        return (new ArrayList<>(mealStorage.values()));
+    }
+
+    @Override
+    public Meal getById(int id) {
+        return mealStorage.get(id);
+    }
+
 }

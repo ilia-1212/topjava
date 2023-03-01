@@ -24,7 +24,12 @@ public class MealServlet extends HttpServlet {
     private static final String INSERT_OR_EDIT = "WEB-INF/editMeal.jsp";
     private static final String VIEW = "WEB-INF/viewMeal.jsp";
     private static final String LIST = "WEB-INF/listMeal.jsp";
-    private final Storage<Meal> storage = new MealStorage();
+    private Storage<Meal> storage;
+
+    @Override
+    public void init() throws ServletException {
+        storage = new MealStorage();
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -34,12 +39,12 @@ public class MealServlet extends HttpServlet {
         String description = req.getParameter("description");
         String calories = req.getParameter("calories");
 
-        log.info("MealServlet doPost parameters: id = {}, dateTime = {}, description = {}, calories = {}", id, dateTime, description, calories);
+        log.info("MealServlet doPost parameters: id = {}, dateTime = {}, description = {}, calories = {}"
+                , id, dateTime, description, calories);
 
-        Meal meal;
-        meal = new Meal(TimeUtil.fromHtml(dateTime), description, Integer.parseInt(calories));
+        Meal meal = new Meal(TimeUtil.fromHtml(dateTime), description, Integer.parseInt(calories));
 
-        if (id.equals("")) {
+        if (id.isEmpty()) {
             storage.add(meal);
             log.info("MealServlet storage.add");
         } else {
