@@ -7,6 +7,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,20 +20,14 @@ public class MealStorage implements Storage<Meal> {
     }
 
     private void fillStorage() {
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0),
-                "Завтрак", 500));
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0),
-                "Обед", 1000));
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0),
-                "Ужин", 500));
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0),
-                "Еда на граничное значение", 100));
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0),
-                "Завтрак", 1000));
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0),
-                "Обед", 500));
-        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0),
-                "Ужин", 410));
+        for (int i = 0; i < 7; i++) {
+            add(new Meal(LocalDateTime.of(2020, Month.JANUARY,
+                    new Random().nextInt(30) + 1,
+                    new Random().nextInt(23) + 1, 0),
+                    "Еда " + i ,
+                    new Random().nextInt(1000))
+            );
+        }
     }
 
     @Override
