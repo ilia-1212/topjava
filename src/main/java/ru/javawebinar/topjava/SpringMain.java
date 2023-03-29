@@ -5,12 +5,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
@@ -24,18 +27,24 @@ public class SpringMain {
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
 
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            int userId = SecurityUtil.authUserId();
-
-            MealsUtil.meals.forEach(meal->mealRestController.create(meal, userId));
+            MealsUtil.meals.forEach(mealRestController::create);
 
             mealRestController.create(new Meal(
                     LocalDateTime.of(2020, Month.MAY, 01, 00, 0),
-                    "Ночной ужин второго пользователя", 5000), userId + 1
+                    "Ночной ужин второго пользователя", 5000)
             );
 
-            List<Meal> meals = mealRestController.getAll(2);
+            List<MealTo> meals = mealRestController.getAll();
             System.out.println(meals);
-            mealRestController.delete(5,1);
+
+
+            List<MealTo> meals1 = mealRestController.getAllFiltred(
+                    LocalDate.of(2020, 01, 31),
+                    LocalTime.of(0, 0),
+                    LocalDate.of(2020, 01, 31),
+                    LocalTime.of(13, 0)
+            );
+            System.out.println(meals1);
         }
     }
 }

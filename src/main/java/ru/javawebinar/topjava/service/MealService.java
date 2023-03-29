@@ -7,7 +7,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -24,7 +23,7 @@ public class MealService {
     }
 
     public void delete(int id, int userId) {
-        checkNotFound(repository.delete(id, userId), "id=" + id + "; userId=" + userId);
+        checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
     public Meal get(int id, int userId) {
