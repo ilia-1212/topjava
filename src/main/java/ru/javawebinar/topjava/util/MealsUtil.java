@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.Collection;
@@ -29,16 +28,6 @@ public class MealsUtil {
 
     public static List<MealTo> getTos(Collection<Meal> meals, int caloriesPerDay) {
         return filterByPredicate(meals, caloriesPerDay, meal -> true);
-    }
-
-    public static List<MealTo> getFilteredTos(Collection<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime) {
-        return filterByPredicate(meals, caloriesPerDay, meal -> DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
-    }
-
-    public static List<MealTo> getFilteredTos(Collection<Meal> meals, int caloriesPerDay, LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        Predicate<Meal> Datefilter = meal -> DateTimeUtil.isBetweenHalfOpen(meal.getDate(), startDate, endDate);
-        Predicate<Meal> DateTimefilter = Datefilter.or(meal -> DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
-        return filterByPredicate(meals, caloriesPerDay, DateTimefilter);
     }
 
     private static List<MealTo> filterByPredicate(Collection<Meal> meals, int caloriesPerDay, Predicate<Meal> filter) {
