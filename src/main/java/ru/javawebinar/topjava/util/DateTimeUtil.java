@@ -13,7 +13,7 @@ public class DateTimeUtil {
                 (endTime == null || lt.compareTo(endTime) < 0);
     }
 
-    public static boolean isBetweenHalfOpen(LocalDate ld, LocalDate startDate, LocalDate endDate) {
+    public static boolean isBetweenClose(LocalDate ld, LocalDate startDate, LocalDate endDate) {
         return (startDate == null || ld.compareTo(startDate) >= 0) && (endDate == null || ld.compareTo(endDate) <= 0);
     }
 

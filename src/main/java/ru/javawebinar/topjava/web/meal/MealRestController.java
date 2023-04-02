@@ -32,7 +32,7 @@ public class MealRestController {
 
     public List<MealTo> getAllFiltred(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         log.info("getAll for userId {}", authUserId());
-        return MealsUtil.getTos(service.getAll(authUserId(), startDate, startTime, endDate, endTime), authUserCaloriesPerDay());
+        return MealsUtil.getTosFiltered(service.getFiltred(authUserId(), startDate, endDate), authUserCaloriesPerDay(), startTime, endTime);
     }
 
     public Meal get(int id) {
