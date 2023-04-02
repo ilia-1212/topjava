@@ -46,7 +46,7 @@ public class SpringMain {
             System.out.println("Вся еда");
             mealRestController.getAll().forEach(System.out::println);
             System.out.println("Только завтраки");
-            mealRestController.getAllFiltred(null, LocalTime.of(10, 0), null, LocalTime.of(11, 0)).forEach(System.out::println);
+            mealRestController.getAllFiltered(null, LocalTime.of(10, 0), null, LocalTime.of(11, 0)).forEach(System.out::println);
         }
     }
 }
