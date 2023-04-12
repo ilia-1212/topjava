@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
-public class InMemoryMealRepository implements MealRepository {
-    private final Map<Integer, Meal> repository1 = new ConcurrentHashMap<>();
+public class InMemoryMeaExtRepository implements MealRepository {
+    private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
@@ -29,31 +29,38 @@ public class InMemoryMealRepository implements MealRepository {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             meal.setUserId(userId);
-            repository1.put(meal.getId(), meal);
+            Map<Integer, Meal> mapMeal = repository.get(userId);
+            if (mapMeal == null) {
+                mapMeal = new ConcurrentHashMap<>();
+            }
+            mapMeal.put(meal.getId(), meal);
+            repository.put(userId, mapMeal);
             return meal;
         }
         // handle case: update, but not present in storage
         if (get(meal.getId(), userId) != null) {
             meal.setUserId(userId);
-            return repository1.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+            return repository.get(userId).computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         }
         return null;
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return get(id, userId) != null && repository1.remove(id) != null;
+        return get(id, userId) != null && repository.get(userId).remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        Meal m = repository1.get(id);
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        Meal m = mealMap.get(id);
         return (m != null && m.getUserId() == userId) ? m : null;
     }
 
     @Override
     public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
-        return repository1
+        Map<Integer, Meal> mapMeal = repository.get(userId);
+        return mapMeal
                 .values()
                 .stream()
                 .filter(meal -> userId == meal.getUserId())
