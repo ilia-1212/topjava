@@ -2,11 +2,13 @@ package ru.javawebinar.topjava;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class SpringMain {
@@ -22,6 +24,7 @@ public class SpringMain {
             //add meal for second user
             int firstUserId = 1;
             int secondUserId = 2;
+            Meal t = mealRestController.update(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondUserId);
 //            Meal savedSecondUserMeal = repository.save(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondUserId);
 
             //get meals by first user before update
