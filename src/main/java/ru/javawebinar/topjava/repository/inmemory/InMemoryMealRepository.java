@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
-    private final Map<Integer, Meal> repository1 = new ConcurrentHashMap<>();
+    private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
@@ -26,37 +26,35 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
+        Map<Integer, Meal> mealMap = repository.getOrDefault(userId, new ConcurrentHashMap<>());
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userId);
-            repository1.put(meal.getId(), meal);
-            return meal;
+            Meal newMeal = mealMap.computeIfAbsent(meal.getId(), (id) -> meal);
+            repository.computeIfAbsent(userId, (id) -> mealMap);
+            return newMeal;
         }
         // handle case: update, but not present in storage
-        if (get(meal.getId(), userId) != null) {
-            meal.setUserId(userId);
-            return repository1.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
-        }
-        return null;
+        Meal newMeal = mealMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+        repository.computeIfPresent(userId, (id, oldMeal) -> mealMap);
+        return newMeal;
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        return get(id, userId) != null && repository1.remove(id) != null;
+        return repository.getOrDefault(userId, new ConcurrentHashMap<>()).remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        Meal m = repository1.get(id);
-        return (m != null && m.getUserId() == userId) ? m : null;
+        return repository.getOrDefault(userId, new ConcurrentHashMap<>()).get(id);
     }
 
     @Override
     public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
-        return repository1
+        Map<Integer, Meal> mapMeal = repository.getOrDefault(userId, new ConcurrentHashMap<>());
+        return mapMeal
                 .values()
                 .stream()
-                .filter(meal -> userId == meal.getUserId())
                 .filter(meal -> DateTimeUtil.isBetweenClose(meal.getDate(), startDate, endDate))
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList());

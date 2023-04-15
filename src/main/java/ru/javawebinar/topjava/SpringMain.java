@@ -22,29 +22,31 @@ public class SpringMain {
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
 
             //add meal for second user
-            int firstUserId = 1;
-            int secondUserId = 2;
-            Meal t = mealRestController.update(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondUserId);
-//            Meal savedSecondUserMeal = repository.save(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondUserId);
+            int firstMealId = 1;
+            int secondMealId = 2;
+
+            Meal t = mealRestController.update(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondMealId);
+            mealRestController.delete(2);
+            //            Meal savedSecondUserMeal = repository.save(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondMealId);
 
             //get meals by first user before update
-//            System.out.println("\nFIRST USER's MEALS before update:" + repository.getAll(firstUserId, null, null, null, null));
+//            System.out.println("\nFIRST USER's MEALS before update:" + repository.getAll(firstMealId, null, null, null, null));
 
             //get meals by second user before update
-//            System.out.println("\nSECOND USER's MEALS before update:" + repository.getAll(secondUserId, null, null, null, null));
+//            System.out.println("\nSECOND USER's MEALS before update:" + repository.getAll(secondMealId, null, null, null, null));
 
             //update second user's meal by first user
-//            repository.save(new Meal(savedSecondUserMeal.getId(), LocalDateTime.MIN, "ИЗМЕНЕННАЯ еда ВТОРОГО пользователя", 1000), firstUserId);
+//            repository.save(new Meal(savedSecondUserMeal.getId(), LocalDateTime.MIN, "ИЗМЕНЕННАЯ еда ВТОРОГО пользователя", 1000), firstMealId);
 
             //update second user's meal by second user
-//            repository.save(new Meal(savedSecondUserMeal.getId(), LocalDateTime.MIN, "Опять ИЗМЕНЕННАЯ еда ВТОРОГО пользователя", 1000), secondUserId);
+//            repository.save(new Meal(savedSecondUserMeal.getId(), LocalDateTime.MIN, "Опять ИЗМЕНЕННАЯ еда ВТОРОГО пользователя", 1000), secondMealId);
 
 
             //get meals by first user after update
-//            System.out.println("\nFIRST USER's MEALS after update:" + repository.getAll(firstUserId, null, null, null, null));
+//            System.out.println("\nFIRST USER's MEALS after update:" + repository.getAll(firstMealId, null, null, null, null));
 
             //get meals by second user after update
-//            System.out.println("\nSECOND USER's MEALS after update:" + repository.getAll(secondUserId, null, null, null, null));
+//            System.out.println("\nSECOND USER's MEALS after update:" + repository.getAll(secondMealId, null, null, null, null));
 
             System.out.println("Вся еда");
             mealRestController.getAll().forEach(System.out::println);

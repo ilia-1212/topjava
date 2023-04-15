@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -15,7 +14,7 @@ public class MealService {
 
     private MealRepository repository;
 
-    public MealService(@Qualifier("inMemoryMeaExtRepository") MealRepository repository) {
+    public MealService(MealRepository repository) {
         this.repository = repository;
     }
 
@@ -32,10 +31,10 @@ public class MealService {
     }
 
     public List<Meal> getAll(int userId) {
-        return getFiltred(userId, null, null);
+        return getFiltered(userId, null, null);
     }
 
-    public List<Meal> getFiltred(int userId, LocalDate startDate, LocalDate endDate) {
+    public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
         return repository.getAll(userId, startDate, endDate);
     }
 
