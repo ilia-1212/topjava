@@ -14,6 +14,15 @@ public class UserServlet extends HttpServlet {
     private static final Logger log = getLogger(UserServlet.class);
 
     @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.debug("post to users");
+        request.setCharacterEncoding("UTF-8");
+        Integer authUserId = (request.getParameter("authUser").isEmpty() ? 0 : Integer.parseInt(request.getParameter("authUser")));
+        SecurityUtil.setAuthUserId(authUserId);
+        response.sendRedirect("index.html");
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to users");
         request.getRequestDispatcher("/users.jsp").forward(request, response);

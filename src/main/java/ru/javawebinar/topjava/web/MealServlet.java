@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -74,7 +76,15 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
-                request.setAttribute("meals", mealRestController.getAll());
+//                request.setAttribute("meals", mealRestController.getAll());
+
+                LocalDate dateBegin = (request.getParameter("dateBegin") == null || request.getParameter("dateBegin").isEmpty()) ? null : LocalDate.parse(request.getParameter("dateBegin"));
+                LocalTime timeBegin = (request.getParameter("timeBegin") == null || request.getParameter("timeBegin").isEmpty()) ? null : LocalTime.parse(request.getParameter("dateBegin"));
+                LocalDate dateEnd = (request.getParameter("dateEnd") == null || request.getParameter("dateEnd").isEmpty()) ? null : LocalDate.parse(request.getParameter("dateBegin"));
+                LocalTime timeEnd = (request.getParameter("timeEnd") == null || request.getParameter("timeEnd").isEmpty()) ? null : LocalTime.parse(request.getParameter("dateBegin"));
+
+                request.setAttribute("meals", mealRestController
+                        .getAllFiltered(dateBegin, timeBegin, dateEnd, timeEnd));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
