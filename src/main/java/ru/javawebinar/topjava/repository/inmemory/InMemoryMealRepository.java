@@ -7,7 +7,7 @@ import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -26,48 +26,42 @@ public class InMemoryMealRepository implements MealRepository {
     }
 
     @Override
-    public synchronized Meal save(Meal meal, int userId) {
+    public Meal save(Meal meal, int userId) {
         Map<Integer, Meal> mealMap;
-        if (repository.get(userId) == null) {
-            mealMap = new ConcurrentHashMap<>();
-        } else {
-            mealMap = repository.get(userId);
-        }
+        mealMap = repository.computeIfAbsent(userId, m -> new ConcurrentHashMap<>());
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             mealMap.put(meal.getId(), meal);
-            repository.put(userId, mealMap);
             return meal;
-        } else {
-            return mealMap.put(meal.getId(), meal);
         }
-        // handle case: update, but not present in storage
-        //repository.computeIfPresent(userId, (id, oldMeal) -> mealMap);
-        //return mealMap.get(meal.getId());
+        return mealMap.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(int id, int userId) {
-        if (repository.get(userId) == null) {
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        if (mealMap == null) {
             return false;
         }
-        return repository.get(userId).remove(id) != null;
+        return mealMap.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        if (repository.get(userId) == null) {
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        if (mealMap == null) {
             return null;
         }
-        return repository.get(userId).get(id);
+        return mealMap.get(id);
     }
 
     @Override
     public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
-        if (repository.get(userId) == null) {
-            return new ArrayList<>();
+        Map<Integer, Meal> mealMap = repository.get(userId);
+        if (mealMap == null) {
+            return Collections.emptyList();
         }
-        return repository.get(userId)
+        return mealMap
                 .values()
                 .stream()
                 .filter(meal -> DateTimeUtil.isBetweenClose(meal.getDate(), startDate, endDate))

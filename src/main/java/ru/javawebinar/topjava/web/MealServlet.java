@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -73,7 +74,7 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
-            case "getAllFiltered" :
+            case "getAllFiltered":
                 log.info("getAllFiltered");
                 LocalDate dateBegin = getDateByRequestParameter(request, "dateBegin");
                 LocalTime timeBegin = getTimeByRequestParameter(request, "timeBegin");
@@ -92,12 +93,13 @@ public class MealServlet extends HttpServlet {
     }
 
     private LocalTime getTimeByRequestParameter(HttpServletRequest request, String parameter) {
-        String RequestParameter = request.getParameter(parameter);
-        return org.springframework.util.StringUtils.hasLength(RequestParameter) ? LocalTime.parse(RequestParameter) : null;
+        String requestParameter = request.getParameter(parameter);
+        return StringUtils.hasLength(requestParameter) ? LocalTime.parse(requestParameter) : null;
     }
+
     private LocalDate getDateByRequestParameter(HttpServletRequest request, String parameter) {
-        String RequestParameter = request.getParameter(parameter);
-        return org.springframework.util.StringUtils.hasLength(RequestParameter) ? LocalDate.parse(RequestParameter) : null;
+        String requestParameter = request.getParameter(parameter);
+        return StringUtils.hasLength(requestParameter) ? LocalDate.parse(requestParameter) : null;
     }
 
     private int getId(HttpServletRequest request) {

@@ -21,7 +21,7 @@ public class SpringMain {
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
             SecurityUtil.setAuthUserId(3);
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            SecurityUtil.setAuthUserId(4);
+            SecurityUtil.setAuthUserId(2);
             //add meal for second user
             int firstMealId = 1;
             int secondMealId = 2;
