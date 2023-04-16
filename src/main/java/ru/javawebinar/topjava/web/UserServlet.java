@@ -16,10 +16,11 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("post to users");
-        request.setCharacterEncoding("UTF-8");
-        Integer authUserId = (request.getParameter("authUser").isEmpty() ? 0 : Integer.parseInt(request.getParameter("authUser")));
+        String authUser = request.getParameter("authUser");
+        int authUserId = (authUser.isEmpty() ? 0 : Integer.parseInt(authUser));
         SecurityUtil.setAuthUserId(authUserId);
-        response.sendRedirect("index.html");
+        response.sendRedirect("meals");
+
     }
 
     @Override

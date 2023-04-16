@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
 
@@ -18,15 +19,15 @@ public class SpringMain {
 //            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
             adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
-
+            SecurityUtil.setAuthUserId(3);
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-
+            SecurityUtil.setAuthUserId(4);
             //add meal for second user
             int firstMealId = 1;
             int secondMealId = 2;
-
+           // mealRestController.delete(2);
             Meal t = mealRestController.update(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondMealId);
-            mealRestController.delete(2);
+
             //            Meal savedSecondUserMeal = repository.save(new Meal(LocalDateTime.now(), "Еда ВТОРОГО пользователя", 0), secondMealId);
 
             //get meals by first user before update

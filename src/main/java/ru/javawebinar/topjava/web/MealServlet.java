@@ -73,21 +73,31 @@ public class MealServlet extends HttpServlet {
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
+            case "getAllFiltered" :
+                log.info("getAllFiltered");
+                LocalDate dateBegin = getDateByRequestParameter(request, "dateBegin");
+                LocalTime timeBegin = getTimeByRequestParameter(request, "timeBegin");
+                LocalDate dateEnd = getDateByRequestParameter(request, "dateEnd");
+                LocalTime timeEnd = getTimeByRequestParameter(request, "timeEnd");
+                request.setAttribute("meals", mealRestController.getAllFiltered(dateBegin, timeBegin, dateEnd, timeEnd));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
+                break;
             case "all":
             default:
                 log.info("getAll");
-//                request.setAttribute("meals", mealRestController.getAll());
-
-                LocalDate dateBegin = (request.getParameter("dateBegin") == null || request.getParameter("dateBegin").isEmpty()) ? null : LocalDate.parse(request.getParameter("dateBegin"));
-                LocalTime timeBegin = (request.getParameter("timeBegin") == null || request.getParameter("timeBegin").isEmpty()) ? null : LocalTime.parse(request.getParameter("dateBegin"));
-                LocalDate dateEnd = (request.getParameter("dateEnd") == null || request.getParameter("dateEnd").isEmpty()) ? null : LocalDate.parse(request.getParameter("dateBegin"));
-                LocalTime timeEnd = (request.getParameter("timeEnd") == null || request.getParameter("timeEnd").isEmpty()) ? null : LocalTime.parse(request.getParameter("dateBegin"));
-
-                request.setAttribute("meals", mealRestController
-                        .getAllFiltered(dateBegin, timeBegin, dateEnd, timeEnd));
+                request.setAttribute("meals", mealRestController.getAll());
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
+    }
+
+    private LocalTime getTimeByRequestParameter(HttpServletRequest request, String parameter) {
+        String RequestParameter = request.getParameter(parameter);
+        return org.springframework.util.StringUtils.hasLength(RequestParameter) ? LocalTime.parse(RequestParameter) : null;
+    }
+    private LocalDate getDateByRequestParameter(HttpServletRequest request, String parameter) {
+        String RequestParameter = request.getParameter(parameter);
+        return org.springframework.util.StringUtils.hasLength(RequestParameter) ? LocalDate.parse(RequestParameter) : null;
     }
 
     private int getId(HttpServletRequest request) {

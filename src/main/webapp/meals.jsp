@@ -23,17 +23,18 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
-    <form method="get">
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="getAllFiltered">
         Дата и время начала
         <div>
-            Дата <input type="date" name="dateBegin">
-            Время <input type="time" name="timeBegin">
+            Дата <input type="date" name="dateBegin" id="dateBegin" value="${param['dateBegin']}">
+            Время <input type="time" name="timeBegin" value="${param['timeBegin']}">
         </div>
 
         Дата и время окончания
         <div>
-            Дата <input type="date" name="dateEnd">
-            Время <input type="time" name="timeEnd">
+            Дата <input type="date" name="dateEnd" value="${param['dateEnd']}">
+            Время <input type="time" name="timeEnd" value="${param['timeEnd']}">
         </div>
         <button type="submit">Фильтр</button>
     </form>
