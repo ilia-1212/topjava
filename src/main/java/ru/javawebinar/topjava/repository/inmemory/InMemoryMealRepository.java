@@ -27,8 +27,7 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        Map<Integer, Meal> mealMap;
-        mealMap = repository.computeIfAbsent(userId, m -> new ConcurrentHashMap<>());
+        Map<Integer, Meal> mealMap = repository.computeIfAbsent(userId, keyUid -> new ConcurrentHashMap<>());
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
             mealMap.put(meal.getId(), meal);
@@ -40,28 +39,19 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public boolean delete(int id, int userId) {
         Map<Integer, Meal> mealMap = repository.get(userId);
-        if (mealMap == null) {
-            return false;
-        }
-        return mealMap.remove(id) != null;
+        return mealMap != null && mealMap.remove(id) != null;
     }
 
     @Override
     public Meal get(int id, int userId) {
         Map<Integer, Meal> mealMap = repository.get(userId);
-        if (mealMap == null) {
-            return null;
-        }
-        return mealMap.get(id);
+        return (mealMap == null) ? null : mealMap.get(id);
     }
 
     @Override
     public List<Meal> getAll(int userId, LocalDate startDate, LocalDate endDate) {
         Map<Integer, Meal> mealMap = repository.get(userId);
-        if (mealMap == null) {
-            return Collections.emptyList();
-        }
-        return mealMap
+        return (mealMap == null) ? Collections.emptyList() : mealMap
                 .values()
                 .stream()
                 .filter(meal -> DateTimeUtil.isBetweenClose(meal.getDate(), startDate, endDate))
