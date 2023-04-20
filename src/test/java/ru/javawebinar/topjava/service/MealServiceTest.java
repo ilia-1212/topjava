@@ -22,7 +22,11 @@ import java.util.List;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
 
-@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/spring-db.xml"})
+@ContextConfiguration({
+        "classpath:spring/spring-app-base.xml",
+        "classpath:spring/spring-app.xml",
+        "classpath:spring/spring-db.xml"
+})
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
