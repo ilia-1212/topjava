@@ -13,6 +13,7 @@ public abstract class AbstractBaseEntity {
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
+    @Column(nullable = false, insertable = true, updatable = true, columnDefinition = "int default nextval('global_seq')")
     protected Integer id;
 
     protected AbstractBaseEntity() {

@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -26,11 +26,22 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@Ignore
+
 public class MealServiceTest {
 
     @Autowired
     private MealService service;
+
+    @Test
+    public void create() {
+        Meal created = service.create(getNew(), USER_ID);
+        int newId = created.id();
+        Meal newMeal = getNew();
+        newMeal.setId(newId);
+//        newMeal.setUser(UserTestData.user);
+        MEAL_MATCHER.assertMatch(created, newMeal);
+        MEAL_MATCHER.assertMatch(service.get(newId, USER_ID), newMeal);
+    }
 
     @Test
     public void delete() {
@@ -49,16 +60,6 @@ public class MealServiceTest {
     }
 
     @Test
-    public void create() {
-        Meal created = service.create(getNew(), USER_ID);
-        int newId = created.id();
-        Meal newMeal = getNew();
-        newMeal.setId(newId);
-        MEAL_MATCHER.assertMatch(created, newMeal);
-        MEAL_MATCHER.assertMatch(service.get(newId, USER_ID), newMeal);
-    }
-
-    @Test
     public void duplicateDateTimeCreate() {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
@@ -67,7 +68,7 @@ public class MealServiceTest {
     @Test
     public void get() {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
-        MEAL_MATCHER.assertMatch(actual, adminMeal1);
+        MEAL_MATCHER.assertMatch(actual, MealTestData.adminMeal1);
     }
 
     @Test

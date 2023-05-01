@@ -1,19 +1,48 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Range;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@NamedQueries({
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m SET m.description=:description, m.calories=:calories, m.dateTime=:date_time WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.BY_ID_USER_ID, query = "SELECT m FROM Meal m WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.BTW_DATETIME_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=?1  AND m.dateTime >=?2 AND m.dateTime <?3 ORDER BY m.dateTime DESC")
+})
+
+@Entity
+@Table(name = "meal", uniqueConstraints = @UniqueConstraint(name = "meal_unique_user_datetime_idx", columnNames = {"user_id", "date_time"}))
 public class Meal extends AbstractBaseEntity {
+    public static final String DELETE = "meal.delete";
+    public static final String UPDATE = "meal.update";
+    public static final String BY_ID_USER_ID = "meal.getById_User_Id";
+    public static final String ALL_SORTED = "meal.getAllSorted";
+    public static final String BTW_DATETIME_SORTED = "meal.getHalfOpenSorted";
+
+    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @NotNull
     private LocalDateTime dateTime;
 
+    @Column(name = "description", nullable = false)
+    @Size(max = 255)
     private String description;
 
+    @Column(name = "calories", nullable = false)
+    @Range(min = 0, max = 10000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "meal_user_id_fkey"), insertable = true, updatable = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public Meal() {
