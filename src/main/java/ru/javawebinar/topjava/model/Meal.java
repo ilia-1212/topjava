@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -18,7 +19,6 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id ORDER BY m.dateTime DESC"),
         @NamedQuery(name = Meal.BTW_DATETIME_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=?1  AND m.dateTime >=?2 AND m.dateTime <?3 ORDER BY m.dateTime DESC")
 })
-
 @Entity
 @Table(name = "meal", uniqueConstraints = @UniqueConstraint(name = "meal_unique_user_datetime_idx", columnNames = {"user_id", "date_time"}))
 public class Meal extends AbstractBaseEntity {
@@ -28,12 +28,13 @@ public class Meal extends AbstractBaseEntity {
     public static final String ALL_SORTED = "meal.getAllSorted";
     public static final String BTW_DATETIME_SORTED = "meal.getHalfOpenSorted";
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
     @Size(max = 255)
+    @NotBlank
     private String description;
 
     @Column(name = "calories", nullable = false)
@@ -41,8 +42,9 @@ public class Meal extends AbstractBaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "meal_user_id_fkey"), insertable = true, updatable = true)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "meal_user_id_fkey"), insertable = true, updatable = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private User user;
 
     public Meal() {

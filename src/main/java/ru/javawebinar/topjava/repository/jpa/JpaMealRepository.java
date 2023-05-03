@@ -7,7 +7,6 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,21 +22,14 @@ public class JpaMealRepository implements MealRepository {
     @Transactional
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
-            meal.setUser(em.find(User.class, userId));
+            meal.setUser(em.getReference(User.class, userId));
             em.persist(meal);
         } else {
-            meal.setUser(em.find(User.class, userId));
-//            return em.merge(meal);
-            if (em.createNamedQuery(Meal.UPDATE)
-                    .setParameter("description", meal.getDescription())
-                    .setParameter("calories", meal.getCalories())
-                    .setParameter("date_time", meal.getDateTime())
-                    .setParameter("id", meal.getId())
-                    .setParameter("user_id", userId)
-                    .executeUpdate() == 0) {
+            if (em.find(Meal.class, meal.id()).getUser().getId() != userId) {
                 return null;
-
             }
+            meal.setUser(em.getReference(User.class, userId));
+            em.merge(meal);
         }
         return meal;
     }
@@ -45,25 +37,23 @@ public class JpaMealRepository implements MealRepository {
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
-        boolean res = em.createNamedQuery(Meal.DELETE)
+        return em.createNamedQuery(Meal.DELETE)
                 .setParameter("id", id)
                 .setParameter("user_id", userId)
                 .executeUpdate() != 0;
-        return res;
     }
 
     @Override
     public Meal get(int id, int userId) {
-//        em.find(Meal.class, id);
-        try {
-            return em.createNamedQuery(Meal.BY_ID_USER_ID, Meal.class)
-                    .setParameter("id", id)
-                    .setParameter("user_id", userId)
-                    .getSingleResult();
-        } catch (NoResultException e) {
+//        return DataAccessUtils.singleResult(em.createNamedQuery(Meal.BY_ID_USER_ID, Meal.class)
+//                .setParameter("id", id)
+//                .setParameter("user_id", userId)
+//                .getResultList());
+        Meal m = em.find(Meal.class, id);
+        if (m != null && m.getUser().getId() != userId) {
             return null;
         }
-
+        return m;
     }
 
     @Override
