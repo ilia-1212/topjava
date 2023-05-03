@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -13,11 +14,17 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @NamedQueries({
-        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id and m.user.id=:user_id"),
-        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m SET m.description=:description, m.calories=:calories, m.dateTime=:date_time WHERE m.id=:id and m.user.id=:user_id"),
-        @NamedQuery(name = Meal.BY_ID_USER_ID, query = "SELECT m FROM Meal m WHERE m.id=:id and m.user.id=:user_id"),
-        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id ORDER BY m.dateTime DESC"),
-        @NamedQuery(name = Meal.BTW_DATETIME_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=?1  AND m.dateTime >=?2 AND m.dateTime <?3 ORDER BY m.dateTime DESC")
+        @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m " +
+                "WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m " +
+                "SET m.description=:description, m.calories=:calories, m.dateTime=:date_time " +
+                "WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.BY_ID_USER_ID, query = "SELECT m FROM Meal m " +
+                "WHERE m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m " +
+                "WHERE m.user.id=:user_id ORDER BY m.dateTime DESC"),
+        @NamedQuery(name = Meal.BTW_DATETIME_SORTED, query = "SELECT m FROM Meal m " +
+                "WHERE m.user.id=?1  AND m.dateTime >=?2 AND m.dateTime <?3 ORDER BY m.dateTime DESC")
 })
 @Entity
 @Table(name = "meal", uniqueConstraints = @UniqueConstraint(name = "meal_unique_user_datetime_idx", columnNames = {"user_id", "date_time"}))
