@@ -33,15 +33,15 @@ public class SpringMain {
 //            System.out.println();
 //            System.out.println(mealController.getBetween(null, null, null, null));
             MealRestController mealRestController = appCtx.getBean(MealRestController.class);
-            Meal m1 = MealTestData.getNew();
-            mealRestController.create(m1);
+            Meal m1 = MealTestData.meal1;
+//            mealRestController.create(m1);
             Meal m_ = mealRestController.get(m1.getId());
-            System.out.println(m_);
-            m_.setCalories(10000);
-            m_.setDateTime(null);
-            mealRestController.update(m_, m1.getId());
-            Meal m_1 = mealRestController.get(m1.getId());
-            System.out.println(m_1);
+
+//            m_.setCalories(10000);
+//            m_.setDateTime(null);
+//            mealRestController.update(m_, m1.getId());
+//            Meal m_1 = mealRestController.get(m1.getId());
+//            System.out.println(m_1);
 
         }
     }
