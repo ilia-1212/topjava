@@ -11,12 +11,13 @@ import java.util.concurrent.TimeUnit;
 public class TimingRules {
     private static final Logger log = LoggerFactory.getLogger("result");
     private static final StringBuilder results = new StringBuilder();
-    private static final String DELIMITER = "=============";
+    private static final String DELIMITER = "======================================================================" +
+            "===============================";
 
     public static final Stopwatch STOPWATCH = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String result = String.format("%s %10d", description.getDisplayName(), TimeUnit.NANOSECONDS.toMicros(nanos));
+            String result = String.format("%-90s %10d", description.getDisplayName(), TimeUnit.NANOSECONDS.toMillis(nanos));
             results.append(result).append("\n");
             log.info(result + " (ms)\n");
         }
@@ -31,7 +32,7 @@ public class TimingRules {
         @Override
         protected void after() {
             log.info("\n" + DELIMITER +
-                    "\nTest         Duration, ms" +
+                    "\nTest                                                      Duration (ms)" +
                     "\n" + DELIMITER + "\n" + results + DELIMITER + "\n");
         }
     };
