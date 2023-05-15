@@ -25,8 +25,6 @@
         <property name="password" value="${database.password}"/>
     </bean>
 
-    <tx:annotation-driven/>
-
     <beans profile="hsqldb">
         <context:property-placeholder location="classpath:db/hsqldb.properties" system-properties-mode="OVERRIDE"/>
 
@@ -59,9 +57,8 @@
               p:password="${database.password}"/>
     </beans>
 
-
-
     <beans profile="jpa, datajpa">
+        <tx:annotation-driven/>
         <!--    <bean id="entityManagerFactory" class="jakarta.persistence.spi.PersistenceProvider"-->
         <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 
@@ -90,6 +87,13 @@
         <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
               p:entityManagerFactory-ref="entityManagerFactory"/>
     </beans>
+    <beans profile="jpa">
+        <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>
+    </beans>
+    <beans profile="datajpa">
+        <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
+        <jpa:repositories base-package="ru.javawebinar.**.repository.datajpa"/>
+    </beans>
     <beans profile="jdbc">
         <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -99,12 +103,5 @@
         <bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
             <constructor-arg ref="jdbcTemplate"/>
         </bean>
-    </beans>
-    <beans profile="jpa">
-        <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>
-    </beans>
-    <beans profile="datajpa">
-        <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
-        <jpa:repositories base-package="ru.javawebinar.**.repository.datajpa"/>
     </beans>
 </beans>

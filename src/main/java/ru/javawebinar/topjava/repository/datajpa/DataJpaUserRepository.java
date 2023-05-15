@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.util.List;
 
 @Repository
-@Transactional(readOnly = true)
 public class DataJpaUserRepository implements UserRepository {
     private static final Sort SORT_NAME_EMAIL = Sort.by(Sort.Direction.ASC, "name", "email");
 
@@ -20,28 +19,29 @@ public class DataJpaUserRepository implements UserRepository {
     }
 
     @Override
-    @Transactional
     public User save(User user) {
         return crudRepository.save(user);
     }
 
     @Override
-    @Transactional
     public boolean delete(int id) {
         return crudRepository.delete(id) != 0;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User get(int id) {
         return crudRepository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User getByEmail(String email) {
         return crudRepository.getByEmail(email);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAll() {
         return crudRepository.findAll(SORT_NAME_EMAIL);
     }

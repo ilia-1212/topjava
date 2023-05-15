@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional(readOnly = true)
 public class DataJpaMealRepository implements MealRepository {
     private final CrudMealRepository crudRepository;
     private final CrudUserRepository crudUserRepository;
@@ -21,33 +20,33 @@ public class DataJpaMealRepository implements MealRepository {
     }
 
     @Override
-    @Transactional
     public Meal save(Meal meal, int userId) {
-        meal.setUser(crudUserRepository.getReferenceById(userId));
-        if (meal.isNew()) {
+        if (meal.isNew() || get(meal.id(), userId) != null) {
+            meal.setUser(crudUserRepository.getReferenceById(userId));
             return crudRepository.save(meal);
         }
-        return get(meal.id(), userId) == null ? null : crudRepository.save(meal);
+        return null;
     }
 
     @Override
-    @Transactional
     public boolean delete(int id, int userId) {
         return crudRepository.delete(id, userId) != 0;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Meal get(int id, int userId) {
-        Optional<Meal> meal = crudRepository.findById(id);
-        return meal.filter(m -> m.getUser().id() == userId).orElse(null);
+        return crudRepository.findById(id).filter(m -> m.getUser().getId() == userId).orElse(null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Meal> getAll(int userId) {
         return crudRepository.getAll(userId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return crudRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
     }
