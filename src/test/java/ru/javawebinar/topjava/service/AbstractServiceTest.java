@@ -1,12 +1,14 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -25,6 +27,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
+
 public abstract class AbstractServiceTest {
     private static final Logger log = getLogger("result");
 
@@ -43,6 +46,10 @@ public abstract class AbstractServiceTest {
     @BeforeClass
     public static void clearResult() {
         results.setLength(0);
+        final AnnotationConfigApplicationContext appContext =  new AnnotationConfigApplicationContext();
+        appContext.getEnvironment().setActiveProfiles( "postgres" );
+        appContext.register( ru.javawebinar.topjava.repository.jdbc.AbstractJdbcMealRepository.class );
+        appContext.refresh();
     }
 
     @AfterClass
