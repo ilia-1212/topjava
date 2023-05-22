@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service.datajpa;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
@@ -17,12 +18,14 @@ import static ru.javawebinar.topjava.UserTestData.*;
 public class DataJpaMealServiceTest extends AbstractMealServiceTest {
 
     @Test
+    @Transactional
     public void getMealUser() {
         Meal meal = service.getMealAndUser(MEAL1_ID, USER_ID);
         User mealUser = meal.getUser();
         // не знаю как тут сделать ,чтобы не падала по lazy init
         // в DataJpaUserServiceTest все ОК, а тут падает в Assert.assertEquals(mealUser, user);
-        Assert.assertEquals(mealUser.getId(), user.getId());
+//        Assert.assertEquals(mealUser.getId(), user.getId());
+        Assert.assertEquals(mealUser, user);
 //        MatcherFactory.Matcher<User> userMatcher = MatcherFactory.usingIgnoringFieldsComparator("registered", "roles","meals");
 //        userMatcher.assertMatch( mealUser, user);
     }
