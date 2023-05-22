@@ -54,18 +54,22 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Meal> meals;
+
     public User() {
     }
 
     public User(User u) {
-        this(u.id, u.name, u.email, u.password, u.caloriesPerDay, u.enabled, u.registered, u.roles);
+        this(u.id, u.name, u.email, u.password, u.caloriesPerDay, u.enabled, u.registered, u.meals, u.roles);
     }
 
-    public User(Integer id, String name, String email, String password, Role... roles) {
-        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), List.of(roles));
+    public User(Integer id, String name, String email, String password, Set<Meal> meals, Role... roles) {
+        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), meals, List.of(roles));
     }
 
-    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Date registered, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled
+            , Date registered, Set<Meal> meals, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -73,6 +77,7 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
+        setMeals(meals);
     }
 
     public String getEmail() {
@@ -117,6 +122,14 @@ public class User extends AbstractNamedEntity {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    public Set<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(Set<Meal> meals) {
+        this.meals = CollectionUtils.isEmpty(meals) ? Collections.emptySet() : Set.copyOf(meals);
     }
 
     public String getPassword() {

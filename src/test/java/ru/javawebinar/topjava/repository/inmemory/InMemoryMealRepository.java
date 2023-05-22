@@ -14,7 +14,6 @@ import javax.annotation.PreDestroy;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 @Repository
@@ -63,6 +62,11 @@ public class InMemoryMealRepository implements MealRepository {
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return filterByPredicate(userId, meal -> Util.isBetweenHalfOpen(meal.getDateTime(), startDateTime, endDateTime));
+    }
+
+    @Override
+    public Meal getMealAndUser(int id, int userId) {
+        return null;
     }
 
     @Override
