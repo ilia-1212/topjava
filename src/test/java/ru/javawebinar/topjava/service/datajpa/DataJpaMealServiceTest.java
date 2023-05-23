@@ -26,6 +26,7 @@ public class DataJpaMealServiceTest extends AbstractMealServiceTest {
         // в DataJpaUserServiceTest все ОК, а тут падает в Assert.assertEquals(mealUser, user);
 //        Assert.assertEquals(mealUser.getId(), user.getId());
         Assert.assertEquals(mealUser, user);
+        Assert.assertEquals(mealUser.getMeals(), user.getMeals());
 //        MatcherFactory.Matcher<User> userMatcher = MatcherFactory.usingIgnoringFieldsComparator("registered", "roles","meals");
 //        userMatcher.assertMatch( mealUser, user);
     }

@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.Stopwatch;
@@ -46,10 +45,16 @@ public abstract class AbstractServiceTest {
     @BeforeClass
     public static void clearResult() {
         results.setLength(0);
-        final AnnotationConfigApplicationContext appContext =  new AnnotationConfigApplicationContext();
-        appContext.getEnvironment().setActiveProfiles( "postgres" );
-        appContext.register( ru.javawebinar.topjava.repository.jdbc.AbstractJdbcMealRepository.class );
+        final AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
+        appContext.getEnvironment().setActiveProfiles("postgres");
+        appContext.register(ru.javawebinar.topjava.repository.jdbc.AbstractJdbcMealRepository.class);
         appContext.refresh();
+        try {
+            Class.forName("ru.javawebinar.topjava.UserTestData");
+            Class.forName("ru.javawebinar.topjava.MealTestData");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @AfterClass
