@@ -55,6 +55,7 @@ public class User extends AbstractNamedEntity {
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OrderBy("dateTime DESC")
     private Set<Meal> meals;
 
     public User() {
@@ -64,12 +65,16 @@ public class User extends AbstractNamedEntity {
         this(u.id, u.name, u.email, u.password, u.caloriesPerDay, u.enabled, u.registered, u.meals, u.roles);
     }
 
+    public User(Integer id, String name, String email, String password, Role... roles) {
+        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), Collections.emptySet(), List.of(roles));
+    }
+
     public User(Integer id, String name, String email, String password, Set<Meal> meals, Role... roles) {
         this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), meals, List.of(roles));
     }
 
-    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled
-            , Date registered, Set<Meal> meals, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled,
+                Date registered, Set<Meal> meals, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -129,7 +134,7 @@ public class User extends AbstractNamedEntity {
     }
 
     public void setMeals(Set<Meal> meals) {
-        this.meals = CollectionUtils.isEmpty(meals) ? Collections.emptySet() : Set.copyOf(meals);
+        this.meals = CollectionUtils.isEmpty(meals) ? Collections.emptySet() : meals;
     }
 
     public String getPassword() {

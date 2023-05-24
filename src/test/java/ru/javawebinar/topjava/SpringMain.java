@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 import ru.javawebinar.topjava.web.user.AdminRestController;
+import ru.javawebinar.topjava.web.user.ProfileRestController;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,12 +15,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
+
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 automatic resource management (ARM)
-        try (GenericXmlApplicationContext  appCtx = new GenericXmlApplicationContext ( )) {
-            appCtx.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(),Profiles.REPOSITORY_IMPLEMENTATION);
-
+        try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()) {
+            appCtx.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(), Profiles.REPOSITORY_IMPLEMENTATION);
             appCtx.getEnvironment().getActiveProfiles();
             appCtx.load("classpath:spring/spring-db.xml", "classpath:spring/spring-app.xml");
             appCtx.refresh();
@@ -29,6 +31,10 @@ public class SpringMain {
             System.out.println();
 
             MealRestController mealController = appCtx.getBean(MealRestController.class);
+            mealController.getWithUser(MealTestData.MEAL1_ID, USER_ID);
+
+            ProfileRestController profileRestController = appCtx.getBean(ProfileRestController.class);
+            profileRestController.getWithMeals(USER_ID);
             List<MealTo> filteredMealsWithExcess =
                     mealController.getBetween(
                             LocalDate.of(2020, Month.JANUARY, 30), LocalTime.of(7, 0),
