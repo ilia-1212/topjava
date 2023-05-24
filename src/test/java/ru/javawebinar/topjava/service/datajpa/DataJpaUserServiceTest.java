@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service.datajpa;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.Profiles;
@@ -14,18 +13,6 @@ import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(profiles = {Profiles.DATAJPA})
 public class DataJpaUserServiceTest extends AbstractUserServiceTest {
-
-    @BeforeClass
-    public static void clearResult() {
-
-        try {
-            Class.forName("ru.javawebinar.topjava.UserTestData");
-            Class.forName("ru.javawebinar.topjava.MealTestData");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Test
     public void getWithMeals() {
         User userActual = service.getWithMeals(USER_ID);

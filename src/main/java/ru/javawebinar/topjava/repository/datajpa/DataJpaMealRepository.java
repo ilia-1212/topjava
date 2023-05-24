@@ -50,8 +50,6 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal getWithUser(int id, int userId) {
-//        Meal meal = get(id, userId);
-//        meal.setUser(crudUserRepository.getReferenceById(userId));
         return crudMealRepository.getWithUser(id, userId);
     }
 }

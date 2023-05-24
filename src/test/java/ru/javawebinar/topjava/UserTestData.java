@@ -1,13 +1,11 @@
 package ru.javawebinar.topjava;
 
-import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
@@ -24,24 +22,20 @@ public class UserTestData {
     public static final User admin = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin", Role.ADMIN);
     public static final User guest = new User(GUEST_ID, "Guest", "guest@gmail.com", "guest");
 
+    static {
+        user.setMeals(MealTestData.meals);
+        admin.setMeals(List.of(MealTestData.adminMeal1, MealTestData.adminMeal2));
+        guest.setMeals(List.of());
+    }
+
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", 1555, false,
-                new Date(), Collections.emptySet(), Collections.singleton(Role.USER));
+                new Date(), Collections.singleton(Role.USER));
     }
 
     public static User getWithMeal() {
-        User user = new User(USER_ID, "User", "user@yandex.ru", "password",
-                Collections.emptySet(), Role.USER);
-        Set<Meal> meals = new LinkedHashSet<>();
-        Collections.addAll(meals,
-                MealTestData.meal7,
-                MealTestData.meal6,
-                MealTestData.meal5,
-                MealTestData.meal4,
-                MealTestData.meal3,
-                MealTestData.meal2,
-                MealTestData.meal1);
-        user.setMeals(meals);
+        User user = new User(USER_ID, "User", "user@yandex.ru", "password", Role.USER);
+        user.setMeals(MealTestData.meals);
         return user;
     }
 

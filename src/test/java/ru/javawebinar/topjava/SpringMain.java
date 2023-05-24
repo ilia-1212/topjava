@@ -27,14 +27,11 @@ public class SpringMain {
             appCtx.refresh();
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Collections.emptySet(), Role.ADMIN));
+            adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Collections.emptyList(), Role.ADMIN));
             System.out.println();
 
             MealRestController mealController = appCtx.getBean(MealRestController.class);
-            mealController.getWithUser(MealTestData.MEAL1_ID, USER_ID);
-
             ProfileRestController profileRestController = appCtx.getBean(ProfileRestController.class);
-            profileRestController.getWithMeals(USER_ID);
             List<MealTo> filteredMealsWithExcess =
                     mealController.getBetween(
                             LocalDate.of(2020, Month.JANUARY, 30), LocalTime.of(7, 0),

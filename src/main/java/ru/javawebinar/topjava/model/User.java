@@ -56,7 +56,7 @@ public class User extends AbstractNamedEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @OrderBy("dateTime DESC")
-    private Set<Meal> meals;
+    private List<Meal> meals;
 
     public User() {
     }
@@ -66,15 +66,20 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(Integer id, String name, String email, String password, Role... roles) {
-        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), Collections.emptySet(), List.of(roles));
+        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), Collections.emptyList(), List.of(roles));
     }
 
-    public User(Integer id, String name, String email, String password, Set<Meal> meals, Role... roles) {
+    public User(Integer id, String name, String email, String password, List<Meal> meals, Role... roles) {
         this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), meals, List.of(roles));
     }
 
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled,
-                Date registered, Set<Meal> meals, Collection<Role> roles) {
+                Date registered, Collection<Role> roles) {
+        this(id, name, email, password, caloriesPerDay, enabled, registered, Collections.emptyList(), roles);
+    }
+
+    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled,
+                Date registered, List<Meal> meals, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -129,12 +134,12 @@ public class User extends AbstractNamedEntity {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    public Set<Meal> getMeals() {
+    public List<Meal> getMeals() {
         return meals;
     }
 
-    public void setMeals(Set<Meal> meals) {
-        this.meals = CollectionUtils.isEmpty(meals) ? Collections.emptySet() : meals;
+    public void setMeals(List<Meal> meals) {
+        this.meals = CollectionUtils.isEmpty(meals) ? Collections.emptyList(): meals;
     }
 
     public String getPassword() {
