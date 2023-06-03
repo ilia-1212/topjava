@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.model;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 public abstract class AbstractNamedEntity extends AbstractBaseEntity {
 
     @NotBlank
+    @NotNull
     @Size(min = 2, max = 128)
     @Column(name = "name", nullable = false)
     protected String name;
