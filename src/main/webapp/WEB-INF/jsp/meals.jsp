@@ -4,16 +4,15 @@
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
-<head>
-    <title>Meals</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
-</head>
+<jsp:include page="fragments/headTag.jsp"/>
+<base href="http://${pageContext.request.serverName}:${pageContext.request.localPort}/${pageContext.request.contextPath}/">
 <body>
+<jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <h3><a href="${pageContext.request.contextPath}"><spring:message code="app.home"/></a></h3>
+    <h3><a href=""><spring:message code="app.home"/></a></h3>
     <hr/>
     <h2><spring:message code="meal.title"/></h2>
-    <form method="get" action="${pageContext.request.contextPath}/meals/filter">
+    <form method="get" action="meals/filter">
         <input type="hidden" name="action" value="filter">
         <dl>
             <dt><spring:message code="meal.dateFrom"/></dt>
@@ -63,5 +62,6 @@
         </c:forEach>
     </table>
 </section>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>
