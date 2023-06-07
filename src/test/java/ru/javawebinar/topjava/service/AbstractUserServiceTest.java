@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,5 +104,23 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
+    }
+
+    @Test
+    public void updateEmptyRoles() {
+        User updated = getUpdatedWithEmptyRoles();
+        service.update(updated);
+        Assert.assertEquals(
+                service.get(USER_ID).getRoles().size(),
+                updated.getRoles().size());
+    }
+
+    @Test
+    public void updateAddRoles() {
+        User updated = getUpdatedWithAddRoles();
+        service.update(updated);
+        Assert.assertEquals(
+                service.get(GUEST_ID).getRoles().size(),
+                updated.getRoles().size());
     }
 }
