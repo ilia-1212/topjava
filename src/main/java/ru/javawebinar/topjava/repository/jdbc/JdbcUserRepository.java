@@ -47,8 +47,8 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public User save(User user) {
-        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         validate(user);
+        BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
@@ -87,17 +87,14 @@ public class JdbcUserRepository implements UserRepository {
     public List<User> getAll() {
         Map<Integer, Collection<Role>> roles = new HashMap<>();
         jdbcTemplate.query("SELECT r.user_id as user_id, r.role as role FROM user_role r",
-                new ResultSetExtractor<Map<Integer, Collection<Role>>>() {
-                    @Override
-                    public Map<Integer, Collection<Role>> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                        while (rs.next()) {
-                            roles.computeIfAbsent(
-                                    Integer.parseInt(rs.getString("user_id")),
-                                    r -> EnumSet.noneOf(Role.class)
-                            ).add(Role.valueOf(rs.getString("role")));
-                        }
-                        return roles;
+                rs -> {
+                    while (rs.next()) {
+                        roles.computeIfAbsent(
+                                Integer.parseInt(rs.getString("user_id")),
+                                r -> EnumSet.noneOf(Role.class)
+                        ).add(Role.valueOf(rs.getString("role")));
                     }
+                    return roles;
                 }
         );
         List<User> users = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
@@ -135,4 +132,4 @@ public class JdbcUserRepository implements UserRepository {
         }
         return u;
     }
-}
+    }
