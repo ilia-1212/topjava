@@ -29,7 +29,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 public abstract class AbstractServiceTest {
     @Autowired
-    protected Environment environment;
+//    protected Environment environment;
 
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
@@ -37,9 +37,9 @@ public abstract class AbstractServiceTest {
     @Rule
     public Stopwatch stopwatch = TimingRules.STOPWATCH;
 
-    protected boolean isJdbcEnvironment() {
-        return environment.acceptsProfiles(Profiles.of(JDBC));
-    }
+//    protected boolean isJdbcEnvironment() {
+//        return environment.acceptsProfiles(Profiles.of(JDBC));
+//    }
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778
     protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
