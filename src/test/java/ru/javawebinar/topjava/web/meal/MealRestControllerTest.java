@@ -2,13 +2,11 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -21,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.util.MealsUtil.createMealTo;
+import static ru.javawebinar.topjava.util.MealsUtil.createTo;
 
 class MealRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = MealRestController.REST_URL + "/";
@@ -43,7 +41,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(meal))
-                )
+        )
                 .andExpect(status().isCreated());
         Meal created = MEAL_MATCHER.readFromJson(action);
         int newId = created.id();
@@ -58,7 +56,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
-                )
+        )
                 .andExpect(status().isNoContent());
         MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, SecurityUtil.authUserId()), updated);
     }
@@ -89,10 +87,10 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL + "filter")
                 .param("startDateTime", "2020-01-30T10:00")
                 .param("endDateTime", "2020-01-30T15:00")
-                )
+        )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_TO_MATCHER.contentJson(createMealTo(meal2, false), createMealTo(meal1, false)));
+                .andExpect(MEAL_TO_MATCHER.contentJson(createTo(meal2, false), createTo(meal1, false)));
     }
 }
