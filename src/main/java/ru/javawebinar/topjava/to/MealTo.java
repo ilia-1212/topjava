@@ -57,6 +57,11 @@ public class MealTo {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(id, dateTime, description, calories, excess);
+    }
+
+    @Override
     public String toString() {
         return "MealTo{" +
                 "id=" + id +

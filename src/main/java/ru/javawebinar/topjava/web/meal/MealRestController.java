@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.web.meal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
@@ -47,17 +48,19 @@ public class MealRestController extends AbstractMealController {
         return ResponseEntity.created(uri).body(m);
     }
 
+    @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Meal meal, @PathVariable int id) {
         super.update(meal, id);
     }
 
+    @Override
     @GetMapping("/filter")
-    public List<MealTo> getBetween(@RequestParam(required = false) LocalDate startDate,
-                                   @RequestParam(required = false) LocalTime startTime,
-                                   @RequestParam(required = false) LocalDate endDate,
-                                   @RequestParam(required = false) LocalTime endTime) {
+    public List<MealTo> getBetween(@RequestParam(required = false) @Nullable LocalDate startDate,
+                                   @RequestParam(required = false) @Nullable LocalTime startTime,
+                                   @RequestParam(required = false) @Nullable LocalDate endDate,
+                                   @RequestParam(required = false) @Nullable LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }
