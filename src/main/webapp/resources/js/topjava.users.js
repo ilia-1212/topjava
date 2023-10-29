@@ -2,7 +2,12 @@ const userAjaxUrl = "admin/users/";
 
 // https://stackoverflow.com/a/5064235/548473
 const ctx = {
-    ajaxUrl: userAjaxUrl
+    ajaxUrl: userAjaxUrl,
+    updateTable: function () {
+        $.ajax({url: userAjaxUrl, type: "GET"}).done(function () {
+            clearTable();
+        });
+    }
 };
 
 // $(document).ready(function () {
