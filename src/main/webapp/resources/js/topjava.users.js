@@ -4,8 +4,8 @@ const userAjaxUrl = "admin/users/";
 const ctx = {
     ajaxUrl: userAjaxUrl,
     updateTable: function () {
-        $.ajax({url: userAjaxUrl, type: "GET"}).done(function () {
-            clearTable();
+        $.ajax({url: userAjaxUrl, type: "GET"}).done(function (data) {
+            clearTable(data);
         });
     }
 };
