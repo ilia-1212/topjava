@@ -1,13 +1,21 @@
 let form;
 
 function makeEditable(datatableApi) {
-    ctx.datatableApi = datatableApi;
+    // ctx.datatableApi = datatableApi;
+    ctx.datatableApi = $("#datatable").DataTable(
+        // https://api.jquery.com/jquery.extend/#jQuery-extend-deep-target-object1-objectN
+        $.extend(true, datatableApi,
+            {
+                "ajax": {
+                    "url": ctx.ajaxUrl,
+                    "dataSrc": ""
+                },
+                "paging": false,
+                "info": true
+            }
+        ));
+
     form = $('#detailsForm');
-    $(".delete").click(function () {
-        if (confirm('Are you sure?')) {
-            deleteRow($(this).closest('tr').attr("id"));
-        }
-    });
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -23,24 +31,19 @@ function add() {
 }
 
 function deleteRow(id) {
-
-    $.ajax({
-        url: ctx.ajaxUrl + id,
-        type: "DELETE"
-    }).done(function () {
-        // ctx.updateTable();
-        $('#' + id).remove();
-        successNoty("Deleted");
-    });
+    if (confirm("Вы уверены?")) {
+        $.ajax({
+            url: ctx.ajaxUrl + id,
+            type: "DELETE"
+        }).done(function () {
+            ctx.updateTable();
+            // $('#' + id).remove();
+            successNoty("Deleted");
+        });
+    }
 }
 
-// function updateTableOld() {
-//     $.get(ctx.ajaxUrl, function (data) {
-//         ctx.datatableApi.clear().rows.add(data).draw();
-//     });
-// }
-
-function clearTable(data) {
+function updateTableByData(data) {
     ctx.datatableApi.clear().rows.add(data).draw();
 }
 
