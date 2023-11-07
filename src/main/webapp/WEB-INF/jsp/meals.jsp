@@ -37,7 +37,7 @@
             <span class="fa fa-plus"></span>
             <spring:message code="common.add"/>
         </button>
-        <table class="table table-striped" id="mealdatatable">
+        <table class="table table-striped" id="datatable">
             <thead>
             <tr>
                 <th><spring:message code="meal.dateTime"/></th>
@@ -49,13 +49,13 @@
             </thead>
 
             <c:forEach items="${requestScope.meals}" var="meal">
-                <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealTo"/>
+                <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
                 <tr data-meal-excess="${meal.excess}" id="${meal.id}">
                     <td>${fn:formatDateTime(meal.dateTime)}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
-                    <td><a class="edit" id="edit_id"><span class="fa fa-pencil"></span></a></td>
-                    <td><a class="delete" id="delete_id"  onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
+                    <td><a><span class="fa fa-pencil"></span></a></td>
+                    <td><a onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
         </table>

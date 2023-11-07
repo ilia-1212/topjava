@@ -2,8 +2,8 @@ const mealAjaxUrl = "profile/meals/";
 const ctx = {
     ajaxUrl: mealAjaxUrl,
     updateTable: function () {
-        $.ajax({url: mealAjaxUrl, type: "GET"}).done(function (data) {
-            clearTable(data);
+        $.ajax({url: mealAjaxUrl, type: "GET"}).done(function () {
+            clearTable();
         });
     }
 };
@@ -11,7 +11,7 @@ const ctx = {
 $(function () {
     let columns;
     makeEditable(
-        $("#mealdatatable").dataTable({
+        $("#datatable").dataTable({
                 "paging": false,
                 "info": true,
                 "columns": [
@@ -35,7 +35,7 @@ $(function () {
                 ],
                 "order": [
                     [
-                        0, "dsc"
+                        0, "asc"
                     ]
                 ]
             }
