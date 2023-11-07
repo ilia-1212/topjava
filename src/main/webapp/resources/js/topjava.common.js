@@ -14,7 +14,6 @@ function makeEditable(datatableApi) {
 
 function add() {
     form.find(":input").val("");
-    // form.find("#id").val(0)
     $("#editRow").modal();
 }
 
