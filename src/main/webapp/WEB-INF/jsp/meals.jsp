@@ -13,47 +13,31 @@
     <div class="container">
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
 
-        <div class="card border-dark">
-            <div class="card-body pb-0">
-                <form method="get" id="filter">
-                    <div class="row">
-                        <div class="col-2">
-                            <label for="startDate">От даты (включая)</label>
-                            <input  type="date" class="form-control" name="startDate" id="startDate" autocomplete="off" value="${param.startDate}">
-                        </div>
-                        <div class="col-2">
-                            <label for="endDate">До даты (включая)</label>
-                            <input  type="date" class="form-control" name="endDate" id="endDate" autocomplete="off" value="${param.endDate}">
-                        </div>
-                        <div class="offset-2 col-3">
-                            <label for="startTime">От времени (включая)</label>
-                            <input type="time" class="form-control" name="startTime" id="startTime" autocomplete="off" value="${param.startTime}">
-                        </div>
-                        <div class="col-3">
-                            <label for="endTime">До времени (исключая)</label>
-                            <input type="time" class="form-control" name="endTime" id="endTime" autocomplete="off" value="${param.endTime}">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer text-right">
-                <button class="btn btn-danger" onclick="clearFilter()">
-                    <span class="fa fa-remove"></span>
-                    <spring:message code="common.cancel"/>
-                </button>
-                <button class="btn btn-primary" onclick="ctx.updateTable()">
-                    <span class="fa fa-filter"></span>
-                    <spring:message code="meal.filter"/>
-                </button>
-            </div>
-        </div>
+        <form method="get" action="meals/filter">
+            <dl>
+                <dt><spring:message code="meal.startDate"/>:</dt>
+                <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
+            </dl>
+            <dl>
+                <dt><spring:message code="meal.endDate"/>:</dt>
+                <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
+            </dl>
+            <dl>
+                <dt><spring:message code="meal.startTime"/>:</dt>
+                <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
+            </dl>
+            <dl>
+                <dt><spring:message code="meal.endTime"/>:</dt>
+                <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+            </dl>
+            <button type="submit"><spring:message code="meal.filter"/></button>
+        </form>
 
         <button class="btn btn-primary" onclick="add()">
             <span class="fa fa-plus"></span>
             <spring:message code="common.add"/>
         </button>
-
-        <table class="table table-striped" id="datatable">
+        <table class="table table-striped" id="mealdatatable">
             <thead>
             <tr>
                 <th><spring:message code="meal.dateTime"/></th>
@@ -63,7 +47,7 @@
                 <th></th>
             </tr>
             </thead>
-            <tbody>
+
             <c:forEach items="${requestScope.meals}" var="meal">
                 <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealTo"/>
                 <tr data-meal-excess="${meal.excess}" id="${meal.id}">
@@ -71,10 +55,9 @@
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
                     <td><a class="edit" id="edit_id"><span class="fa fa-pencil"></span></a></td>
-                    <td><a onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
+                    <td><a class="delete" id="delete_id"  onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
-            </tbody>
         </table>
     </div>
 </div>
@@ -84,7 +67,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="modalTitle"><spring:message code="meal.add"/></h4>
+                <h4 class="modal-title"><spring:message code="meal.add"/></h4>
                 <button type="button" class="close" data-dismiss="modal" onclick="closeNoty()">&times;</button>
             </div>
             <div class="modal-body">

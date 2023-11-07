@@ -4,31 +4,18 @@ const userAjaxUrl = "admin/users/";
 const ctx = {
     ajaxUrl: userAjaxUrl,
     updateTable: function () {
-        $.ajax({url: userAjaxUrl, type: "GET"}).done(function () {
-            updateTableByData();
+        $.ajax({url: userAjaxUrl, type: "GET"}).done(function (data) {
+            clearTable(data);
         });
     }
 };
 
-function enable(chkbox, id) {
-    var enabled = chkbox.is(":checked");
-//  https://stackoverflow.com/a/22213543/548473
-    $.ajax({
-        url: userAjaxUrl + id,
-        type: "POST",
-        data: "enabled=" + enabled
-    }).done(function () {
-        chkbox.closest("tr").attr("data-user-enabled", enabled);
-        successNoty(enabled ? "User enabled" : "User disabled");
-    }).fail(function () {
-        $(chkbox).prop("checked", !enabled);
-    });
-}
-
 // $(document).ready(function () {
 $(function () {
     makeEditable(
-        {
+        $("#datatable").DataTable({
+            "paging": false,
+            "info": true,
             "columns": [
                 {
                     "data": "name"
@@ -40,7 +27,7 @@ $(function () {
                     "data": "roles"
                 },
                 {
-                    "data": "enabled",
+                    "data": "enabled"
                 },
                 {
                     "data": "registered"
@@ -59,12 +46,7 @@ $(function () {
                     0,
                     "asc"
                 ]
-            ],
-            "createdRow": function (row, data, dataIndex) {
-                if (!data.enabled) {
-                    $(row).attr("data-user-enabled", false);
-                }
-            }
-        }
+            ]
+        })
     );
 });
