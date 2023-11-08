@@ -37,7 +37,7 @@
             <spring:message code="common.add"/>
         </button>
         <hr>
-        <table border="1" cellpadding="8" cellspacing="0">
+        <table class="table table-striped" id="datatable" border="1" cellpadding="8" cellspacing="0">
             <thead>
             <tr>
                 <th><spring:message code="meal.dateTime"/></th>
@@ -47,6 +47,7 @@
                 <th></th>
             </tr>
             </thead>
+            <tbody>
             <c:forEach items="${requestScope.meals}" var="meal">
                 <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
                 <tr data-meal-excess="${meal.excess}" id="${meal.id}">
@@ -62,6 +63,7 @@
                     <td><a class="delete" onclick="deleteRow(${meal.id})"><span class="fa fa-remove"></span></a></td>
                 </tr>
             </c:forEach>
+            </tbody>
         </table>
     </div>
 </div>
