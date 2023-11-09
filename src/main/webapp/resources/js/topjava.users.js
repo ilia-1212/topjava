@@ -63,10 +63,7 @@ function setEnable(id, control) {
                 data: ({enable: isEnable}),
             })
                 .done(function () {
-                    $(control).parent().parent().attr('check', isEnable);
-                })
-                .fail(function () {
-                    $(control).prop('checked', !isEnable);
+                    $(control).parent().parent().attr('data-user-enable', isEnable);
                 });
         }
     );
