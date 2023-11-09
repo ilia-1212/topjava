@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -32,6 +34,12 @@ public class MealUIController extends AbstractMealController {
     @GetMapping
     public List<MealTo> getAll() {
         return super.getAll();
+    }
+
+    @Override
+    @GetMapping("/filter")
+    public List<MealTo> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
     @PostMapping
