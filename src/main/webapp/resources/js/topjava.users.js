@@ -51,3 +51,23 @@ function updateTable() {
         draw(data);
     });
 }
+
+function setEnable(id, control) {
+    $(control).off('change');
+    var isEnable = $(control).is(":checked");
+    $(control).change(
+        function () {
+            $.ajax({
+                url: ctx.ajaxUrl + id,
+                type: "POST",
+                data: ({enable: isEnable}),
+            })
+                .done(function () {
+                    $(control).parent().parent().attr('check', isEnable);
+                })
+                .fail(function () {
+                    $(control).prop('checked', !isEnable);
+                });
+        }
+    );
+}
