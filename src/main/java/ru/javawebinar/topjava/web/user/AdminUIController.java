@@ -10,8 +10,10 @@ import ru.javawebinar.topjava.model.User;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminUIController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminUIController extends AbstractUserController {
+
+    static final String REST_URL = "/admin/users";
 
     @Override
     @GetMapping
@@ -35,7 +37,7 @@ public class AdminUIController extends AbstractUserController {
     }
 
     @PostMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void setEnable(@PathVariable int id, @RequestParam @NonNull boolean enable) {
         super.setEnable(id, enable);
     }

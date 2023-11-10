@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -84,5 +85,13 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
+    }
+
+    @Test
+    void setEnable() throws Exception {
+        User user = getNew();
+        service.create(user);
+        service.setEnable(user.id(), !user.isEnabled());
+        assertNotEquals(user.isEnabled(), service.get(user.id()).isEnabled());
     }
 }
