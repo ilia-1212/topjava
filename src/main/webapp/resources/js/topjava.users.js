@@ -53,7 +53,6 @@ function updateTable() {
 }
 
 function setEnable(id, control) {
-    $(control).off('change');
     var isEnable = $(control).is(":checked");
     $(control).change(
         function () {

@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -35,7 +36,7 @@ public class AdminUIController extends AbstractUserController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void setEnable(@PathVariable int id, @RequestParam boolean enable) {
+    public void setEnable(@PathVariable int id, @RequestParam @NonNull boolean enable) {
         super.setEnable(id, enable);
     }
 }
