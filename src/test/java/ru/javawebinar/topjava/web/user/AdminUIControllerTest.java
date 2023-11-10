@@ -29,7 +29,7 @@ class AdminUIControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders
                 .post(REST_URL + GUEST_ID)
                 .param("enable", String.valueOf(user.isEnabled()))
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
