@@ -19,21 +19,21 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="startDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
-                                <input type="date" class="form-control" name="startDate" id="startDate"  value="${param.startDate}">
+                                <input type="date" class="form-control" name="startDate" id="startDate">
                             </div>
                             <div class="col-md-6">
                                 <label for="endDate" class="form-label"><spring:message code="meal.endDate"/>:</label>
-                                <input type="date" class="form-control" name="endDate" id="endDate" value="${param.endDate}">
+                                <input type="date" class="form-control" name="endDate" id="endDate">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="startTime" class="form-label"><spring:message code="meal.startTime"/>:</label>
-                                <input type="time" class="form-control" name="startTime" id="startTime" value="${param.startTime}">
+                                <input type="time" class="form-control" name="startTime" id="startTime">
                             </div>
                             <div class="col-md-6">
                                 <label for="endTime" class="form-label"><spring:message code="meal.endTime"/>:</label>
-                                <input type="time" class="form-control" name="endTime" id="endTime" value="${param.endTime}">
+                                <input type="time" class="form-control" name="endTime" id="endTime">
                             </div>
                         </div>
                     </div>

@@ -43,13 +43,6 @@ $(function () {
 });
 
 function updateTable() {
-    // $.ajax({
-    //     type: "GET",
-    //     url: ctx.ajaxUrl + 'filter',
-    //     data: formFilter.serialize()
-    // }).done(function () {
-    //     draw();
-    // });
     $.get(ctx.ajaxUrl + 'filter', formFilter.serialize())
         .done(function (data) {
             draw(data);
@@ -57,10 +50,7 @@ function updateTable() {
 }
 
 function clearFilter() {
-    formFilter.find("#startDate").val("");
-    formFilter.find("#endDate").val("");
-    formFilter.find("#startTime").val("");
-    formFilter.find("#endTime").val("");
+    formFilter.get(0).reset();
     updateTable();
 }
 

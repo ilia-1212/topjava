@@ -89,9 +89,8 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     void setEnable() throws Exception {
-        User user = getNew();
-        service.create(user);
-        service.setEnable(user.id(), !user.isEnabled());
+        User user = service.get(USER_ID);
+        service.setEnable(USER_ID, !user.isEnabled());
         assertNotEquals(user.isEnabled(), service.get(user.id()).isEnabled());
     }
 }

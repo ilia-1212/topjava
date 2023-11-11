@@ -20,7 +20,7 @@ tr[data-meal-excess="false"] {
 }
 
 tr[data-user-enable="false"] {
-    color: #80001e;
+    color: #fd2424;
 }
 
 tr[data-meal-excess="true"] {

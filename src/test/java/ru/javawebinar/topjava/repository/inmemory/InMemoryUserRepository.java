@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
