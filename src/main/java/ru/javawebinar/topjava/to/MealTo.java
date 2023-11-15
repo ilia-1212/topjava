@@ -1,15 +1,24 @@
 package ru.javawebinar.topjava.to;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.beans.ConstructorProperties;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class MealTo extends BaseTo {
+public class MealTo extends BaseTo implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
+    @NotBlank
     private final LocalDateTime dateTime;
 
+    @NotBlank
     private final String description;
 
+    @NotNull
     private final int calories;
 
     private final boolean excess;
