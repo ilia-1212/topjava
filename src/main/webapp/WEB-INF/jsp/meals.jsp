@@ -94,6 +94,8 @@
                         <label for="calories" class="col-form-label"><spring:message code="meal.calories"/></label>
                         <input type="number" class="form-control" id="calories" name="calories" placeholder="1000">
                     </div>
+
+<%--                    <input type="hidden" id="excess" name="excess">--%>
                 </form>
             </div>
             <div class="modal-footer">

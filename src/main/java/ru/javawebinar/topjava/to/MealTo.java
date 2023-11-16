@@ -1,8 +1,7 @@
 package ru.javawebinar.topjava.to;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.beans.ConstructorProperties;
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,7 +22,6 @@ public class MealTo extends BaseTo implements Serializable {
     @NotNull
     private final int calories;
 
-    @NotNull @Future
     private final boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
