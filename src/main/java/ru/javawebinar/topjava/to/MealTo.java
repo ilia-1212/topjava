@@ -1,7 +1,12 @@
 package ru.javawebinar.topjava.to;
 
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,17 +17,19 @@ public class MealTo extends BaseTo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @NotBlank
+    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private final LocalDateTime dateTime;
 
     @NotBlank
+    @Size(min = 2, max = 120)
     private final String description;
 
     @NotNull
+    @Range(min = 10, max = 5000)
     private final int calories;
 
-    private final boolean excess;
+    private boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
     public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
@@ -47,6 +54,10 @@ public class MealTo extends BaseTo implements Serializable {
 
     public boolean isExcess() {
         return excess;
+    }
+
+    public @Null boolean setExcess(boolean excess) {
+        return this.excess = excess;
     }
 
     @Override

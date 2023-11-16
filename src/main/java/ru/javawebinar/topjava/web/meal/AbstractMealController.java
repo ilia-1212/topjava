@@ -35,10 +35,16 @@ public abstract class AbstractMealController {
         service.delete(id, userId);
     }
 
-    public List<MealTo> getAll() {
+    public List<MealTo> getAllTo() {
         int userId = SecurityUtil.authUserId();
         log.info("getAll for user {}", userId);
         return MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
+    }
+
+    public List<Meal> getAll() {
+        int userId = SecurityUtil.authUserId();
+        log.info("getAll for user {}", userId);
+        return service.getAll(userId);
     }
 
     public Meal create(MealTo mealTo) {
