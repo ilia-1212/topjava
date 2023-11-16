@@ -21,7 +21,7 @@ $(function () {
     makeEditable(
         $("#datatable").DataTable({
             "ajax": {
-                "url": mealAjaxUrl,
+                "url": mealAjaxUrl + "to",
                 "dataSrc": ""
             },
             "paging": false,
