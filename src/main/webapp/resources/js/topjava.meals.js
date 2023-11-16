@@ -31,7 +31,6 @@ $(function () {
                     "data": "dateTime",
                     "render": function (date, type, row) {
                         if (type === "display") {
-                            // return ${fn:replace(date.dateTime, 'T', ' ')}
                             return date.replace("T"," ").substring(0, 20);
                         }
                         return date;

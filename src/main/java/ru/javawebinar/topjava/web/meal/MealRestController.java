@@ -20,29 +20,15 @@ public class MealRestController extends AbstractMealController {
     static final String REST_URL = "/rest/profile/meals";
 
     @Override
-    @GetMapping("/{id}")
-    public Meal get(@PathVariable int id) {
-        return super.get(id);
-    }
-
-    @Override
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        super.delete(id);
-    }
-
-    @Override
     @GetMapping
     public List<Meal> getAll() {
         return super.getAll();
     }
 
     @Override
-    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody MealTo mealTo, @PathVariable int id) {
-        super.update(mealTo, id);
+    @GetMapping("/{id}")
+    public Meal get(@PathVariable int id) {
+        return super.get(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -54,6 +40,20 @@ public class MealRestController extends AbstractMealController {
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable int id) {
+        super.delete(id);
+    }
+
+    @Override
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestBody MealTo mealTo, @PathVariable int id) {
+        super.update(mealTo, id);
     }
 
     @Override

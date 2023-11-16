@@ -5,7 +5,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
 import java.io.Serial;
@@ -19,20 +18,20 @@ public class MealTo extends BaseTo implements Serializable {
 
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private final LocalDateTime dateTime;
+    private LocalDateTime dateTime;
 
     @NotBlank
     @Size(min = 2, max = 120)
-    private final String description;
+    private String description;
 
     @NotNull
     @Range(min = 10, max = 5000)
-    private final int calories;
+    private Integer calories;
 
-    private boolean excess;
+    private Boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer id, LocalDateTime dateTime, String description, Integer calories, Boolean excess) {
         super(id);
         this.dateTime = dateTime;
         this.description = description;
@@ -48,16 +47,20 @@ public class MealTo extends BaseTo implements Serializable {
         return description;
     }
 
-    public int getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
-    public boolean isExcess() {
-        return excess;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public @Null boolean setExcess(boolean excess) {
-        return this.excess = excess;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(Integer calories) {
+        this.calories = calories;
     }
 
     @Override
