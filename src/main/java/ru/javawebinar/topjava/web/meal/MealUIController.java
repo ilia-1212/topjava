@@ -26,7 +26,7 @@ public class MealUIController extends AbstractMealController {
 
     @Override
     @GetMapping
-    public List<MealTo> getAll() {
+    public List<Meal> getAll() {
         return super.getAll();
     }
 
@@ -46,6 +46,7 @@ public class MealUIController extends AbstractMealController {
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<String> createOrUpdate(@Valid MealTo mealTo, BindingResult result) {
+        mealTo.setExcess(false);
         ResponseEntity<String> errorFieldsMsg = getStringResponseEntity(result);
         if (errorFieldsMsg != null) return errorFieldsMsg;
         if (mealTo.isNew()) {
