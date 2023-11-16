@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -23,6 +25,11 @@ public class MealRestController extends AbstractMealController {
     @GetMapping
     public List<Meal> getAll() {
         return super.getAll();
+    }
+
+    @GetMapping("/to")
+    public List<MealTo> getAllTo() {
+        return MealsUtil.getTos(super.getAll(), SecurityUtil.authUserCaloriesPerDay());
     }
 
     @Override
