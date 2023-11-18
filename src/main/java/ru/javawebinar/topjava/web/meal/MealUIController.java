@@ -8,15 +8,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-
-import static ru.javawebinar.topjava.util.Util.getStringResponseEntity;
 
 @RestController
 @RequestMapping(value = "/profile/meals", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,14 +21,8 @@ public class MealUIController extends AbstractMealController {
 
     @Override
     @GetMapping
-    public List<Meal> getAll() {
+    public List<MealTo> getAll() {
         return super.getAll();
-    }
-
-
-    @GetMapping("/to")
-    public List<MealTo> getAllTo() {
-        return MealsUtil.getTos(super.getAll(), SecurityUtil.authUserCaloriesPerDay());
     }
 
     @Override
@@ -48,10 +39,9 @@ public class MealUIController extends AbstractMealController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<String> createOrUpdate(@Valid MealTo mealTo, BindingResult result) {
-        ResponseEntity<String> errorFieldsMsg = getStringResponseEntity(result);
-        if (errorFieldsMsg != null) return errorFieldsMsg;
+        ResponseEntity<String> responseEntity = ValidationUtil.getStringResponseEntity(result);
+        if (responseEntity != null) return responseEntity;
         if (mealTo.isNew()) {
             super.create(mealTo);
         } else {

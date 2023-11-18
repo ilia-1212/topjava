@@ -21,7 +21,7 @@ $(function () {
     makeEditable(
         $("#datatable").DataTable({
             "ajax": {
-                "url": mealAjaxUrl + "to",
+                "url": mealAjaxUrl,
                 "dataSrc": ""
             },
             "paging": false,
@@ -31,11 +31,10 @@ $(function () {
                     "data": "dateTime",
                     "render": function (date, type, row) {
                         if (type === "display") {
-                            return date.replace("T"," ").substring(0, 20);
+                            return date.replace("T"," ").substring(0, 16);
                         }
                         return date;
                     }
-
                 },
                 {
                     "data": "description"
@@ -61,11 +60,7 @@ $(function () {
                 ]
             ],
             "createdRow": function (row, data, dataIndex) {
-                if (data.excess) {
-                    $(row).attr("data-meal-excess", true);
-                } else {
-                    $(row).attr("data-meal-excess", false);
-                }
+                $(row).attr("data-meal-excess", data.excess);
             }
         })
     );

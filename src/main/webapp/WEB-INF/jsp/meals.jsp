@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
-<html>
+
 <jsp:include page="fragments/headTag.jsp"/>
 <body>
 <script type="text/javascript" src="resources/js/topjava.common.js" defer></script>
@@ -94,8 +94,6 @@
                         <label for="calories" class="col-form-label"><spring:message code="meal.calories"/></label>
                         <input type="number" class="form-control" id="calories" name="calories" placeholder="1000">
                     </div>
-
-<%--                    <input type="hidden" id="excess" name="excess">--%>
                 </form>
             </div>
             <div class="modal-footer">
@@ -113,13 +111,11 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<jsp:include page="fragments/i18n.jsp">
+    <jsp:param name="page" value="meal"/>
+</jsp:include>
 <script type="text/javascript">
-    const i18n = {};
     i18n["addTitle"] = '<spring:message code="meal.add"/>';
     i18n["editTitle"] = '<spring:message code="meal.edit"/>';
-
-    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus","common.confirm"}%>'>
-    i18n["${key}"] = "<spring:message code="${key}"/>";
-    </c:forEach>
 </script>
 </html>
