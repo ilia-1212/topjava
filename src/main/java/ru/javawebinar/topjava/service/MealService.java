@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.to.MealInputTo;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
@@ -55,10 +56,10 @@ public class MealService {
     }
 
     @Transactional
-    public void update(MealTo mealTo, int userId) {
-        Meal meal = get(mealTo.getId(), userId);
-        Meal updatedMeal = MealsUtil.updateFromTo(meal,mealTo);
+    public void update(MealInputTo mealInputTo, int userId) {
+        Meal updatedMeal = MealsUtil.createNewFromTo(mealInputTo);
         repository.save(updatedMeal, userId);
+
     }
 
     public Meal getWithUser(int id, int userId) {

@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.to.MealInputTo;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.net.URI;
@@ -32,8 +33,8 @@ public class MealRestController extends AbstractMealController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Meal> createWithLocation(@RequestBody Meal meal) {
-        Meal created = super.create(meal);
+    public ResponseEntity<Meal> createWithLocation(@RequestBody MealInputTo mealInputTo) {
+        Meal created = super.create(mealInputTo);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -52,8 +53,8 @@ public class MealRestController extends AbstractMealController {
     @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody MealTo mealTo, @PathVariable int id) {
-        super.update(mealTo, id);
+    public void update(@RequestBody MealInputTo mealInputTo, @PathVariable int id) {
+        super.update(mealInputTo, id);
     }
 
     @Override
