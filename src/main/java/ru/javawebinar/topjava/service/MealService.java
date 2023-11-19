@@ -55,11 +55,9 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.id());
     }
 
-    @Transactional
     public void update(MealInputTo mealInputTo, int userId) {
         Meal updatedMeal = MealsUtil.createNewFromTo(mealInputTo);
         repository.save(updatedMeal, userId);
-
     }
 
     public Meal getWithUser(int id, int userId) {
