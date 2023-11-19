@@ -88,12 +88,6 @@ function renderDeleteBtn(data, type, row) {
     }
 }
 
-function renderHiddenCol(data, type, row) {
-    if (type === "display") {
-        return "<span class='hidden'></span>";
-    }
-}
-
 function failNoty(jqXHR) {
     closeNoty();
     failedNote = new Noty({
