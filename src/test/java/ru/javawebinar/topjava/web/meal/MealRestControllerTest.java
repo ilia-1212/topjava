@@ -62,7 +62,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(user))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isNoContent());
-
+        updatedTo.setId(MEAL1_ID);
         MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, USER_ID), MealsUtil.createNewFromTo(updatedTo));
     }
 
