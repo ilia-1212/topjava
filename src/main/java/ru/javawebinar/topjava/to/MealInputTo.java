@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.to;
 
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
 
 import javax.validation.constraints.NotBlank;
@@ -70,7 +69,6 @@ public class MealInputTo extends BaseTo {
     }
 
     public void setCalories(Integer calories) {
-        Assert.notNull(calories, "Meal must have calories");
         this.calories = calories;
     }
 }
