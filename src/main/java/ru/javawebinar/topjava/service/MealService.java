@@ -4,12 +4,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealInputTo;
-import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
@@ -57,7 +55,7 @@ public class MealService {
 
     public void update(MealInputTo mealInputTo, int userId) {
         Meal updatedMeal = MealsUtil.createNewFromTo(mealInputTo);
-        repository.save(updatedMeal, userId);
+        checkNotFoundWithId(repository.save(updatedMeal, userId), mealInputTo.id());
     }
 
     public Meal getWithUser(int id, int userId) {
