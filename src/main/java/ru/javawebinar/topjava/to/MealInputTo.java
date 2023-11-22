@@ -14,7 +14,7 @@ import java.time.LocalTime;
 public class MealInputTo extends BaseTo {
 
     @NotNull
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
 
     @NotBlank

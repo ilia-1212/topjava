@@ -64,6 +64,7 @@ $(function () {
             }
         })
     );
+
     $('#startDate').datetimepicker(
         {
                 timepicker: false,
@@ -78,19 +79,22 @@ $(function () {
             formatDate: 'Y-m-d'
         }
     );
-
     $('#startTime').datetimepicker(
         {
                datepicker: false,
                format: 'H:i'
         }
     );
-
     $('#endTime').datetimepicker(
         {
             datepicker: false,
             format: 'H:i'
         }
     );
-
+    $('#dateTime').datetimepicker(
+        {
+            datepicker: true,
+            format: 'Y-m-d H:i'
+        }
+    );
 });
