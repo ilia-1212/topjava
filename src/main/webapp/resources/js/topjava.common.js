@@ -12,6 +12,10 @@ function makeEditable(datatableApi) {
     $.ajaxSetup({cache: false});
 }
 
+function formatDateValue(value) {
+    return value.replace("T"," ").substring(0, 16);
+}
+
 function add() {
     $("#modalTitle").html(i18n["addTitle"]);
     form.find(":input").val("");
@@ -24,7 +28,7 @@ function updateRow(id) {
     $.get(ctx.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             if (key === "dateTime") {
-                value = value.replace("T"," ").substring(0, 16)
+                value = formatDateValue(value);
             }
             form.find("input[name='" + key + "']").val(value);
         });
