@@ -120,7 +120,7 @@ $(function () {
     $('#dateTime').datetimepicker(
         {
             datepicker: true,
-            format: 'Y-m-d H:i',
+            format: 'Y-m-d H:i'
         }
     );
 });
