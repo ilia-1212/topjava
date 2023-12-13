@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava.util.exception;
 
-import org.springframework.http.HttpStatus;
+    import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //  http://stackoverflow.com/a/22358422/548473
