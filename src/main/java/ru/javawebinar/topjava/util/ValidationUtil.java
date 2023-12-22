@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.util;
 
-
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
