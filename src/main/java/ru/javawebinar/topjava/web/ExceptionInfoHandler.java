@@ -20,6 +20,8 @@ import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.List;
 
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
@@ -32,43 +34,50 @@ public class ExceptionInfoHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(NotFoundException.class)
     public ErrorInfo notFoundError(HttpServletRequest req, NotFoundException e) {
-        return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND, "");
+        return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR, "");
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
     public ErrorInfo validationError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, "");
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
     }
 
     //https://stackoverflow.com/questions/11014055/how-to-handle-the-bind-exception-with-exceptionhandler
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(BindException.class)
-    public ErrorInfo BindError(HttpServletRequest req, BindException e) {
-        String errorText = ValidationUtil.getErrorText(e);
+    public ErrorInfo bindError(HttpServletRequest req, BindException e) {
+        List<String> errorText = ValidationUtil.getErrorText(e.getBindingResult());
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, errorText);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorInfo internalError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, APP_ERROR, "");
+        return logAndGetErrorInfo(req, e, true, APP_ERROR);
+    }
+
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException,
+                                                ErrorType errorType) {
+        return logAndGetErrorInfo(req, e, logException, errorType, List.of());
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String errorText) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException,
+                                                ErrorType errorType, List<String> errorText) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, (errorText.length() > 0) ? errorText : rootCause.toString());
+        return new ErrorInfo(req.getRequestURL(), errorType,
+                (errorText.size() > 0) ? errorText : Collections.singletonList(ValidationUtil.getLocalMessage(rootCause)));
     }
 }
