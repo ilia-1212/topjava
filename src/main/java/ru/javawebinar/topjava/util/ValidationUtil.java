@@ -75,11 +75,8 @@ public class ValidationUtil {
         Throwable rootCause = NestedExceptionUtils.getRootCause(t);
         return rootCause != null ? rootCause : t;
     }
-    public static String getLocalMessage(@NonNull Throwable t) {
-        return  t.getLocalizedMessage();
-    }
 
-    public static List<String> getErrorText(BindingResult result) {
+    public static List<String> getErrorTexts(BindingResult result) {
         return result.getFieldErrors().stream()
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.toList());

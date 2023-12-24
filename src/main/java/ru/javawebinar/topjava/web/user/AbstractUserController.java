@@ -16,7 +16,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
-    protected static final String NON_UNIQUE_EMAIL_MESSAGE = "user.error.nonUniqueEmail";
+    public static final String NON_UNIQUE_EMAIL_MESSAGE = "user.error.nonUniqueEmail";
 
     @Autowired
     protected MessageSource messageSource;
