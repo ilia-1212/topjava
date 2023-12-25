@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,11 +22,13 @@ import ru.javawebinar.topjava.util.exception.ErrorInfo;
 import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
+import ru.javawebinar.topjava.web.meal.AbstractMealController;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 
@@ -48,10 +51,19 @@ public class ExceptionInfoHandler {
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR,
-                List.of(messageSource.getMessage(AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE,
-                        null,
-                        LocaleContextHolder.getLocale())));
+        if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().contains("meal_unique_user_datetime_idx")) {
+            return logAndGetErrorInfo(req, e, true, DATA_ERROR,
+                    List.of(messageSource.getMessage(AbstractMealController.NON_UNIQUE_USER_DATETIME_MESSAGE,
+                            null,
+                            LocaleContextHolder.getLocale())));
+        }
+        if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().contains("users_unique_email_idx")) {
+            return logAndGetErrorInfo(req, e, true, DATA_ERROR,
+                    List.of(messageSource.getMessage(AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE,
+                            null,
+                            LocaleContextHolder.getLocale())));
+        }
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)  // 422

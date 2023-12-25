@@ -19,6 +19,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 
 public abstract class AbstractMealController {
     private final Logger log = LoggerFactory.getLogger(getClass());
+    public static final String NON_UNIQUE_USER_DATETIME_MESSAGE = "meal.error.nonUniqueUserDateTime";
 
     @Autowired
     private MealService service;
