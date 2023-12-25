@@ -24,12 +24,10 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
-import static ru.javawebinar.topjava.web.user.AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE;
 
 @RestControllerAdvice(annotations = RestController.class)
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
@@ -37,7 +35,7 @@ public class ExceptionInfoHandler {
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     @Autowired
-    protected MessageSource messageSource;
+    private MessageSource messageSource;
 
 
     //  http://stackoverflow.com/a/22358422/548473
@@ -50,11 +48,16 @@ public class ExceptionInfoHandler {
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        return logAndGetErrorInfo(req, e, true, DATA_ERROR, List.of(messageSource.getMessage(AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE, null, LocaleContextHolder.getLocale())));
+        return logAndGetErrorInfo(req, e, true, DATA_ERROR,
+                List.of(messageSource.getMessage(AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE,
+                        null,
+                        LocaleContextHolder.getLocale())));
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler({IllegalRequestDataException.class,
+            MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class})
     public ErrorInfo validationError(HttpServletRequest req, Exception e) {
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
     }
