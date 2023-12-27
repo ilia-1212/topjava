@@ -28,6 +28,7 @@ import ru.javawebinar.topjava.web.user.AbstractUserController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static ru.javawebinar.topjava.util.exception.ErrorType.*;
@@ -51,18 +52,20 @@ public class ExceptionInfoHandler {
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
-        if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().contains("meal_unique_user_datetime_idx")) {
-            return logAndGetErrorInfo(req, e, true, DATA_ERROR,
-                    List.of(messageSource.getMessage(AbstractMealController.NON_UNIQUE_USER_DATETIME_MESSAGE,
-                            null,
-                            LocaleContextHolder.getLocale())));
+        Map<String, String> constraintMap = Map.of(
+                "meal_unique_user_datetime_idx", AbstractMealController.NON_UNIQUE_USER_DATETIME_MESSAGE,
+                "users_unique_email_idx", AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE
+                );
+
+        for (var constraint : constraintMap.entrySet()) {
+            if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().contains(constraint.getKey())) {
+                return logAndGetErrorInfo(req, e, true, DATA_ERROR,
+                        List.of(messageSource.getMessage(constraint.getValue(),
+                                null,
+                                LocaleContextHolder.getLocale())));
+            }
         }
-        if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().contains("users_unique_email_idx")) {
-            return logAndGetErrorInfo(req, e, true, DATA_ERROR,
-                    List.of(messageSource.getMessage(AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE,
-                            null,
-                            LocaleContextHolder.getLocale())));
-        }
+
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
