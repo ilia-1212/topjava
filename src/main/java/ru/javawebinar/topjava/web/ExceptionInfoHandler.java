@@ -58,7 +58,7 @@ public class ExceptionInfoHandler {
                 );
 
         for (var constraint : constraintMap.entrySet()) {
-            if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().contains(constraint.getKey())) {
+            if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().toLowerCase().contains(constraint.getKey())) {
                 return logAndGetErrorInfo(req, e, true, DATA_ERROR,
                         List.of(messageSource.getMessage(constraint.getValue(),
                                 null,
