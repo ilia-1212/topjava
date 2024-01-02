@@ -26,5 +26,15 @@
                 </button>
             </form:form>
         </sec:authorize>
+        <jsp:include page="locale.jsp"/>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropDownLangMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                ${pageContext.response.locale}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropDownLangMenuButton">
+                <a class="dropdown-item" href="?lang=en" onclick=setLang("en")>English</a>
+                <a class="dropdown-item" href="?lang=ru" onclick=setLang("ru")>Русский</a>
+            </div>
+        </div>
     </div>
 </nav>
