@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,7 +84,17 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     void createWithErrorDuplicateEmail() throws Exception {
         UserTo newUserTo = new UserTo(null, "newUserName", user.getEmail(), "newUserPassword", 100);
-        String response = getResponseString(newUserTo, REST_URL, status().isConflict());
+        ResultMatcher status = status().isConflict();
+        String response = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newUserTo))
+        )
+                .andDo(print())
+                .andExpect(status)
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         Assertions.assertTrue(response.contains("User with this email already exists"));
     }
 

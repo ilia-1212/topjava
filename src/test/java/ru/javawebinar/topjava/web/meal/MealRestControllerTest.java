@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,6 @@ import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.util.MealsUtil.createTo;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
-import static ru.javawebinar.topjava.util.exception.ErrorType.VALIDATION_ERROR;
-import static ru.javawebinar.topjava.web.meal.AbstractMealController.NON_UNIQUE_USER_DATETIME_MESSAGE;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -132,7 +131,17 @@ class MealRestControllerTest extends AbstractControllerTest {
     void createWithErrorDuplicateTime() throws Exception {
         Meal newMeal = MealTestData.getNew();
         newMeal.setDateTime(meal2.getDateTime());
-        String response = getResponseString(newMeal, REST_URL, user, status().isConflict());
+        ResultMatcher status = status().isConflict();
+        String response = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newMeal))
+                .with(userHttpBasic(user)))
+                .andDo(print())
+                .andExpect(status)
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
         Assertions.assertTrue(response.contains("You already have food with this date and time"));
     }
 
