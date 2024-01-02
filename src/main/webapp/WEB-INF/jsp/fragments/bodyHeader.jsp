@@ -26,7 +26,7 @@
                 </button>
             </form:form>
         </sec:authorize>
-        <jsp:include page="locale.jsp"/>
+
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropDownLangMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 ${pageContext.response.locale}
