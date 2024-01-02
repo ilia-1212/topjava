@@ -32,9 +32,10 @@
                 ${pageContext.response.locale}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropDownLangMenuButton">
-                <a class="dropdown-item" href="?lang=en" onclick=setLang("en")>English</a>
-                <a class="dropdown-item" href="?lang=ru" onclick=setLang("ru")>Русский</a>
+                <a class="dropdown-item" href="${requestScope['javax.servlet.forward.request_uri']}?lang=en" onclick=setLang("en")>English</a>
+                <a class="dropdown-item" href="${requestScope['javax.servlet.forward.request_uri']}?lang=ru" onclick=setLang("ru")>Русский</a>
             </div>
+
         </div>
     </div>
 </nav>
