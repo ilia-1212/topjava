@@ -57,8 +57,9 @@ public class ExceptionInfoHandler {
                 "users_unique_email_idx", AbstractUserController.NON_UNIQUE_EMAIL_MESSAGE
                 );
 
+        String rootCause = Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().toLowerCase();
         for (var constraint : constraintMap.entrySet()) {
-            if (Objects.requireNonNull(NestedExceptionUtils.getRootCause(e)).getMessage().toLowerCase().contains(constraint.getKey())) {
+            if (rootCause.contains(constraint.getKey())) {
                 return logAndGetErrorInfo(req, e, true, DATA_ERROR,
                         List.of(messageSource.getMessage(constraint.getValue(),
                                 null,
