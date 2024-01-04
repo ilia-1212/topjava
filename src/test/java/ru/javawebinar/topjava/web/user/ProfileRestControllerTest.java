@@ -21,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
+import static ru.javawebinar.topjava.UserTestData.getUpdated;
+import static ru.javawebinar.topjava.util.UsersUtil.asTo;
 import static ru.javawebinar.topjava.util.UsersUtil.createNewFromTo;
 import static ru.javawebinar.topjava.web.user.ProfileRestController.REST_URL;
 
@@ -123,13 +125,13 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void updateWithErrorDuplicateEmail() throws Exception {
-        UserTo updatedTo = new UserTo(null, "", "", "newPassword", 1500);
-        updatedTo.setEmail(user.getEmail());
+        UserTo updatedTo = UsersUtil.asTo(getUpdated());
+        updatedTo.setEmail(admin.getEmail());
         perform(MockMvcRequestBuilders.put(REST_URL).contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(user))
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isConflict());
     }
 
     @Test
