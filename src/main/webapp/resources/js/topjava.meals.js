@@ -72,6 +72,8 @@ $(function () {
         format: 'Y-m-d',
         formatDate: 'Y-m-d',
     };
+
+    $.datetimepicker.setLocale(localeCode);
     startDate.datetimepicker({
         ...dateOptions,
         onShow: function (ct) {
