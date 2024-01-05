@@ -21,8 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
-import static ru.javawebinar.topjava.UserTestData.getUpdated;
-import static ru.javawebinar.topjava.util.UsersUtil.asTo;
 import static ru.javawebinar.topjava.util.UsersUtil.createNewFromTo;
 import static ru.javawebinar.topjava.web.user.ProfileRestController.REST_URL;
 
