@@ -67,7 +67,7 @@ public abstract class AbstractControllerTest {
                 .build();
     }
 
-    protected ResultActions  perform(MockHttpServletRequestBuilder builder) throws Exception {
+    protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
     }
 
